@@ -1,0 +1,40 @@
+﻿# Secrets et environnements locaux
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+service-account*.json
+
+# Python / Django
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+*.sqlite3
+staticfiles/
+media/
+
+# Flutter
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Angular / Node.js
+node_modules/
+dist/
+.angular/
+
+# Logs et système
+*.log
+.DS_Store
+Thumbs.db
+
+# Éditeurs
+.idea/
+*.iml
