@@ -1,0 +1,1 @@
+"""Contrats HTTP du noyau."""
