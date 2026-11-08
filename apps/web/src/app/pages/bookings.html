@@ -9,11 +9,16 @@
     @for (item of items(); track item.id) {
       <a class="card" [routerLink]="['/missions', item.id]">
         <div class="spread">
-          <h3>Mission</h3>
+          <h3>{{ item.professional_name || 'Mission' }}</h3>
           <span class="badge neutral">{{ statusLabel(item.status) }}</span>
         </div>
         <p class="muted">{{ item.created_at | date: 'd MMM y, HH:mm' }}</p>
       </a>
-    } @empty { <p class="muted">Aucune mission.</p> }
+    } @empty {
+      <article class="panel">
+        <h2>Aucune mission</h2>
+        <p class="muted">Elle apparaîtra ici dès qu’un devis sera retenu.</p>
+      </article>
+    }
   </div>
 </section>

@@ -1,36 +1,68 @@
 <section class="wide">
-  <p class="kicker">Nouvelle demande</p>
-  <h1>Décrire le travail</h1>
-  <form class="stack panel" [formGroup]="form" (ngSubmit)="submit()">
+  <header class="page-title">
+    <p class="kicker">Nouvelle demande</p>
+    <h1>Décrire le travail</h1>
+    <p class="lede">Une demande, plusieurs devis. Vous n’en retiendrez qu’un.</p>
+  </header>
+  <ol class="client-steps">
+    <li [class.on]="step() === 1">1. Le besoin</li>
+    <li [class.on]="step() === 2">2. Les professionnels</li>
+    <li [class.on]="step() === 3">3. L’envoi</li>
+  </ol>
+  <form class="stack panel" [formGroup]="form" (ngSubmit)="step() === 3 ? submit() : continue()">
     @if (error()) { <p class="alert">{{ error() }}</p> }
-    <label>Zone
-      <select formControlName="zone">
-        <option value="">Choisir</option>
-        @for (zone of zones(); track zone.id) {
-          <option [value]="zone.id">{{ zoneLabel(zone) }}</option>
-        }
-      </select>
-    </label>
-    <label>Titre <input formControlName="title" /></label>
-    <label>Description <textarea formControlName="description"></textarea></label>
-    <label>Urgence
-      <select formControlName="urgency">
-        <option value="low">Faible</option>
-        <option value="normal">Normale</option>
-        <option value="urgent">Urgente</option>
-      </select>
-    </label>
-    <label>Budget indicatif, FCFA <input formControlName="budget" inputmode="numeric" /></label>
-    <label>Date souhaitée <input type="datetime-local" formControlName="desired_date" /></label>
-    <fieldset>
-      <legend>Professionnels</legend>
-      @for (pro of professionals(); track pro.id) {
-        <label class="check">
-          <input type="checkbox" [checked]="selected().includes(pro.id)" (change)="toggle(pro.id, $any($event.target).checked)" />
-          {{ pro.business_name }}
-        </label>
-      } @empty { <p class="muted">Aucun professionnel disponible.</p> }
-    </fieldset>
-    <button class="btn" type="submit">Envoyer la demande</button>
+    @if (step() === 1) {
+      <label>Zone
+        <select formControlName="zone">
+          <option value="">Choisir</option>
+          @for (zone of zones(); track zone.id) {
+            <option [value]="zone.id">{{ zoneLabel(zone) }}</option>
+          }
+        </select>
+      </label>
+      <label>Titre <input formControlName="title" placeholder="Réfection d’une salle d’eau" /></label>
+      <label>Description <textarea formControlName="description" placeholder="Décrivez le travail, l’accès et ce qui est déjà en place."></textarea></label>
+      <label>Urgence
+        <select formControlName="urgency">
+          <option value="low">Faible</option>
+          <option value="normal">Normale</option>
+          <option value="urgent">Urgente</option>
+        </select>
+      </label>
+      <label>Budget indicatif, FCFA <input formControlName="budget" inputmode="numeric" /></label>
+      <label>Date souhaitée <input type="datetime-local" formControlName="desired_date" /></label>
+      <button class="btn" type="submit">Choisir les professionnels</button>
+    }
+    @if (step() === 2) {
+      <p>Les profils de la zone choisie. Vous pouvez en viser plusieurs.</p>
+      @if (prosError()) { <p class="alert">{{ prosError() }}</p> }
+      <div class="pro-pick">
+        @for (pro of visiblePros(); track pro.id) {
+          <label class="check">
+            <input type="checkbox" [checked]="selected().includes(pro.id)" (change)="toggle(pro.id, $any($event.target).checked)" />
+            <span>
+              <strong>{{ pro.business_name }}</strong>
+              <small class="muted">{{ pro.zones.map(zoneLabel).join(' · ') || 'Zone non indiquée' }}</small>
+            </span>
+          </label>
+        } @empty { <p class="muted">Aucun professionnel visible pour cette zone.</p> }
+      </div>
+      <div class="row">
+        <button class="btn-ghost" type="button" (click)="back()">Retour</button>
+        <button class="btn" type="submit">Vérifier</button>
+      </div>
+    }
+    @if (step() === 3) {
+      <article class="review-card">
+        <h2>{{ form.controls.title.value }}</h2>
+        <p>{{ form.controls.description.value }}</p>
+        <p class="muted">{{ zoneName() }} · {{ form.controls.urgency.value === 'urgent' ? 'Urgente' : form.controls.urgency.value === 'low' ? 'Faible' : 'Normale' }}</p>
+        <p>Destinataires : {{ chosenNames() }}</p>
+      </article>
+      <div class="row">
+        <button class="btn-ghost" type="button" (click)="back()">Retour</button>
+        <button class="btn" type="submit">Envoyer la demande</button>
+      </div>
+    }
   </form>
 </section>

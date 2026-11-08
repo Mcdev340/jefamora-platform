@@ -62,6 +62,11 @@ export class BookingDetailPage {
     this.api.get<Booking>(`/bookings/${id}/`).subscribe({
       next: (booking) => {
         this.booking.set(booking);
+        if (booking.review) {
+          this.review.set(booking.review);
+          this.rating.set(booking.review.rating);
+          this.comment.set(booking.review.comment);
+        }
         if (booking.conversation_id) {
           this.api.get<ChatMessage[]>(`/messaging/${booking.conversation_id}/messages/`).subscribe({
             next: (messages) => this.messages.set(messages),
@@ -155,5 +160,25 @@ export class BookingDetailPage {
 
   mine(sender: string): boolean {
     return sender === this.auth.profile()?.id;
+  }
+
+  canEditReview(): boolean {
+    const until = this.review()?.editable_until;
+    return Boolean(until && new Date(until).getTime() > Date.now());
+  }
+
+  saveReview(): void {
+    const current = this.review();
+    if (!current) {
+      this.publishReview();
+      return;
+    }
+    this.api.patch<Review>(`/reviews/${current.id}/`, { rating: this.rating(), comment: this.comment() }).subscribe({
+      next: (review) => {
+        this.review.set(review);
+        this.notice.set('Avis mis à jour.');
+      },
+      error: (err) => this.error.set(errorText(err)),
+    });
   }
 }

@@ -1,31 +1,45 @@
-<section class="page-hero photo-hero photo-contact">
-  <div class="frame">
-    <p class="eyebrow">Contact</p>
-    <h1>Écrire à Jefamora</h1>
-    <p>Le message ouvre un ticket de support rattaché à votre compte. Il ne sert pas à discuter d’une mission : pour cela, les messages sont dans la mission.</p>
+<section class="story-hero">
+  <div class="frame story-hero-grid">
+    <div>
+      <p class="eyebrow">Contact</p>
+      <h1>Écrire à Jefamora</h1>
+      <p>Le message ouvre un ticket de support rattaché à votre compte. Il ne sert pas à discuter d’une mission : pour cela, les messages sont dans la mission.</p>
+    </div>
+    <figure>
+      <img src="/contact-desk.jpg" alt="Conseiller Jefamora au casque, devant le mur de la marque" />
+    </figure>
   </div>
 </section>
 
-<section class="sheet">
-  <div class="frame contact-layout">
+<section class="contact-studio">
+  <div class="frame contact-studio-grid">
     <div class="contact-points">
       <article>
+        <span class="trust-icon orange" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>
+        </span>
         <h2>Depuis un compte</h2>
         <p>Connectez-vous avec un e-mail déjà confirmé. Le texte est conservé si vous devez d’abord vous connecter.</p>
       </article>
       <article>
+        <span class="trust-icon blue" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M7 4h10v16H7z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>
+        </span>
         <h2>Suivi</h2>
         <p>Le ticket reste visible dans <a routerLink="/compte/support">Compte → Support</a>, avec sa priorité : basse, normale ou haute.</p>
       </article>
       <article>
+        <span class="trust-icon violet" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 3 5 6v6c0 4.5 3 6.8 7 8 4-1.2 7-3.5 7-8V6z"/></svg>
+        </span>
         <h2>Confidentialité</h2>
         <p>Les consentements et la demande de suppression se gèrent dans <a routerLink="/compte/confidentialite">Compte → Confidentialité</a>.</p>
       </article>
     </div>
     <form class="contact-form" [formGroup]="form" (submit)="submit($event)">
-      <img class="contact-photo" src="/auth-welcome.jpg" alt="Cliente et professionnel devant une maison" />
       @if (error()) { <p class="alert">{{ error() }}</p> }
       @if (sent()) { <p class="ok">{{ sent() }}</p> }
+      <p class="contact-label">Choisissez un sujet</p>
       <div class="topic-row">
         @for (topic of topics; track topic) {
           <button type="button" [class.on]="form.controls.subject.value === topic" (click)="pick(topic)">{{ topic }}</button>
@@ -45,6 +59,7 @@
         </select>
       </label>
       <button class="btn" type="submit">{{ auth.isLoggedIn() ? 'Envoyer' : 'Se connecter pour envoyer' }}</button>
+      <p class="contact-hint">Le ticket est envoyé depuis un compte dont l’e-mail est confirmé.</p>
     </form>
   </div>
 </section>

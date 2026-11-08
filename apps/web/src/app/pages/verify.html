@@ -1,7 +1,9 @@
 <section class="narrow">
-  <p class="kicker">Vérification</p>
-  <h1>Confirmez votre e-mail</h1>
-  <p class="muted">Le code est valable 30 minutes. En développement, il s’affiche dans le terminal de l’API.</p>
+  <header class="page-title">
+    <p class="kicker">Vérification</p>
+    <h1>Confirmez votre e-mail</h1>
+    <p class="lede">Le code est valable 30 minutes. En développement, il s’affiche dans le terminal de l’API.</p>
+  </header>
   <form class="stack panel" [formGroup]="form" (ngSubmit)="submit()">
     @if (error()) { <p class="alert">{{ error() }}</p> }
     <label>E-mail <input type="email" formControlName="email" /></label>

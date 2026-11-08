@@ -9,16 +9,25 @@
       </span>
     </a>
     <nav class="nav">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Accueil</a>
-      <a routerLink="/a-propos" routerLinkActive="active">À propos</a>
-      <a routerLink="/services" routerLinkActive="active">Services</a>
-      <a routerLink="/fonctionnalites" routerLinkActive="active">Fonctionnalités</a>
-      <a routerLink="/contact" routerLinkActive="active">Contact</a>
-      @if (auth.isLoggedIn()) {
+      @if (auth.isLoggedIn() && auth.isClient()) {
         <a routerLink="/tableau" routerLinkActive="active">Tableau</a>
+        <a routerLink="/professionnels" routerLinkActive="active">Annuaire</a>
         <a routerLink="/demandes" routerLinkActive="active">Demandes</a>
         <a routerLink="/missions" routerLinkActive="active">Missions</a>
+        <a routerLink="/compte/favoris" routerLinkActive="active">Favoris</a>
         <a routerLink="/compte/profil" routerLinkActive="active">Compte</a>
+      } @else {
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Accueil</a>
+        <a routerLink="/a-propos" routerLinkActive="active">À propos</a>
+        <a routerLink="/services" routerLinkActive="active">Services</a>
+        <a routerLink="/fonctionnalites" routerLinkActive="active">Fonctionnalités</a>
+        <a routerLink="/contact" routerLinkActive="active">Contact</a>
+        @if (auth.isLoggedIn()) {
+          <a routerLink="/tableau" routerLinkActive="active">Tableau</a>
+          <a routerLink="/demandes" routerLinkActive="active">Demandes</a>
+          <a routerLink="/missions" routerLinkActive="active">Missions</a>
+          <a routerLink="/compte/profil" routerLinkActive="active">Compte</a>
+        }
       }
     </nav>
     <div class="nav-end">

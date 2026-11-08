@@ -10,9 +10,14 @@
       </div>
       <p>{{ current.description }}</p>
       <p class="muted">{{ urgencyLabel(current.urgency) }} · budget {{ fcfa(current.budget) }}</p>
-      @if (auth.isClient() && (current.status === 'open' || current.status === 'quoted')) {
-        <button class="btn-danger" type="button" (click)="cancel()">Annuler la demande</button>
-      }
+      <div class="row">
+        @if (auth.isClient() && (current.status === 'open' || current.status === 'quoted')) {
+          <button class="btn-danger" type="button" (click)="cancel()">Annuler la demande</button>
+        }
+        @if (current.booking_id) {
+          <a class="btn" [routerLink]="['/missions', current.booking_id]">Ouvrir la mission</a>
+        }
+      </div>
     </article>
     <aside class="panel">
       <h2>Destinataires</h2>
@@ -41,27 +46,30 @@
   }
 
   <section>
-    <h2>Devis</h2>
-    <div class="cards">
+    <div class="section-head">
+      <h2>Devis à comparer</h2>
+    </div>
+    <div class="quote-board">
       @for (quote of quotes(); track quote.id) {
-        <article class="card">
+        <article class="card" [class.chosen]="quote.status === 'accepted'">
           <div class="spread">
-            <h3>{{ fcfa(quote.total_amount) }}</h3>
+            <h3>{{ author(quote) }}</h3>
             <span class="badge neutral">{{ quoteLabel(quote.status) }}</span>
           </div>
-          <p>{{ quote.estimated_delay }}</p>
+          <p class="price">{{ fcfa(quote.total_amount) }}</p>
+          <p>{{ quote.estimated_delay || 'Délai non précisé' }}</p>
           <p class="muted">{{ quote.conditions }}</p>
           @for (line of quote.lines; track line.id) {
             <p>{{ line.label }} · {{ line.quantity }} × {{ fcfa(line.unit_price) }}</p>
           }
           @if (auth.isClient() && quote.status === 'sent') {
             <div class="row">
-              <button class="btn" type="button" (click)="decide(quote.id, 'accept')">Accepter</button>
+              <button class="btn" type="button" (click)="decide(quote.id, 'accept')">Retenir ce devis</button>
               <button class="btn-ghost" type="button" (click)="decide(quote.id, 'reject')">Refuser</button>
             </div>
           }
         </article>
-      } @empty { <p class="muted">Pas encore de devis.</p> }
+      } @empty { <p class="muted">Pas encore de devis. Les professionnels choisis peuvent répondre depuis leur espace.</p> }
     </div>
   </section>
 }

@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
 from apps.quotes.models import Quote, QuoteLine
@@ -14,6 +15,7 @@ class RecipientSerializer(serializers.ModelSerializer):
 
 class ServiceRequestSerializer(serializers.ModelSerializer):
     recipients = RecipientSerializer(many=True, read_only=True)
+    booking_id = serializers.SerializerMethodField()
 
     class Meta:
         model = ServiceRequest
@@ -27,9 +29,16 @@ class ServiceRequestSerializer(serializers.ModelSerializer):
             "budget",
             "desired_date",
             "recipients",
+            "booking_id",
             "created_at",
         )
         read_only_fields = ("status", "created_at")
+
+    def get_booking_id(self, obj):
+        try:
+            return str(obj.booking.id)
+        except ObjectDoesNotExist:
+            return None
 
 
 class ServiceRequestCreateSerializer(serializers.Serializer):

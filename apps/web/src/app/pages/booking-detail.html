@@ -1,36 +1,35 @@
 @if (error()) { <p class="alert">{{ error() }}</p> }
 @if (notice()) { <p class="ok">{{ notice() }}</p> }
 @if (booking(); as current) {
-  <section class="split">
-    <article>
-      <p class="kicker">Mission</p>
-      <h1>{{ statusLabel(current.status) }}</h1>
-      <p class="muted">Ouverte le {{ current.created_at | date: 'd MMMM y' }}</p>
-      <div class="row">
-        @if (auth.isProfessional() && current.status === 'confirmed') {
-          <button class="btn" type="button" (click)="act('start')">Démarrer</button>
-        }
-        @if (auth.isProfessional() && current.status === 'in_progress') {
-          <button class="btn" type="button" (click)="act('request-completion')">Déclarer la fin</button>
-        }
-        @if (auth.isClient() && current.status === 'completed_by_professional') {
-          <button class="btn" type="button" (click)="act('confirm-completion')">Confirmer la fin</button>
-        }
-      </div>
-    </article>
-    <aside class="panel stack">
-      <h2>Litige</h2>
-      <label>Description <textarea [value]="dispute()" (input)="dispute.set($any($event.target).value)"></textarea></label>
-      <button class="btn-danger" type="button" (click)="openDispute()">Ouvrir un litige</button>
-      @if (disputeId()) {
-        <label>Preuve <input type="file" (change)="addEvidence($event)" /></label>
-      }
-    </aside>
-  </section>
+  <header class="page-title">
+    <p class="kicker">Mission</p>
+    <h1>{{ current.professional_name || statusLabel(current.status) }}</h1>
+    <p class="lede">{{ statusLabel(current.status) }} · ouverte le {{ current.created_at | date: 'd MMMM y' }}</p>
+  </header>
+
+  <ol class="mission-steps">
+    <li [class.on]="current.status === 'confirmed'">Confirmée</li>
+    <li [class.on]="current.status === 'in_progress'">En cours</li>
+    <li [class.on]="current.status === 'completed_by_professional'">Fin déclarée</li>
+    <li [class.on]="current.status === 'confirmed_by_client' || current.status === 'disputed'">Clôturée</li>
+  </ol>
+
+  <div class="row" style="margin-bottom: 1rem">
+    @if (auth.isProfessional() && current.status === 'confirmed') {
+      <button class="btn" type="button" (click)="act('start')">Démarrer</button>
+    }
+    @if (auth.isProfessional() && current.status === 'in_progress') {
+      <button class="btn" type="button" (click)="act('request-completion')">Déclarer la fin</button>
+    }
+    @if (auth.isClient() && current.status === 'completed_by_professional') {
+      <button class="btn" type="button" (click)="act('confirm-completion')">Confirmer la fin des travaux</button>
+    }
+  </div>
 
   <section class="split">
     <article class="panel">
       <h2>Messages</h2>
+      <p class="muted">Seuls vous et le professionnel de cette mission pouvez écrire ici.</p>
       <div class="thread">
         @for (message of messages(); track message.id) {
           <div class="bubble" [class.mine]="mine(message.sender)">
@@ -46,7 +45,7 @@
     </article>
     <aside class="panel stack">
       <h2>Avis</h2>
-      @if (auth.isClient() && current.status === 'confirmed_by_client') {
+      @if (auth.isClient() && current.status === 'confirmed_by_client' && (!review() || canEditReview())) {
         <label>Note
           <select [value]="rating()" (change)="rating.set(+$any($event.target).value)">
             <option [value]="5">5</option>
@@ -57,16 +56,30 @@
           </select>
         </label>
         <label>Commentaire <textarea [value]="comment()" (input)="comment.set($any($event.target).value)"></textarea></label>
-        <button class="btn" type="button" (click)="publishReview()">Publier</button>
+        <button class="btn" type="button" (click)="saveReview()">{{ review() ? 'Mettre à jour' : 'Publier l’avis' }}</button>
+        @if (review()) { <p class="muted">Modifiable pendant 48 heures.</p> }
       }
       @if (review(); as currentReview) {
         <p class="stars">{{ currentReview.rating }} / 5</p>
         <p>{{ currentReview.comment }}</p>
-        @if (auth.isProfessional()) {
+        @if (currentReview.professional_reply) { <p class="muted">Réponse : {{ currentReview.professional_reply }}</p> }
+        @if (auth.isProfessional() && !currentReview.professional_reply) {
           <label>Réponse <textarea [value]="reply()" (input)="reply.set($any($event.target).value)"></textarea></label>
           <button class="btn-ghost" type="button" (click)="sendReply()">Répondre</button>
         }
+      } @else if (auth.isClient() && current.status !== 'confirmed_by_client') {
+        <p class="muted">L’avis s’ouvre après votre confirmation de la fin des travaux.</p>
       }
     </aside>
+  </section>
+
+  <section class="panel stack" style="margin-top: 1rem">
+    <h2>Litige</h2>
+    <p class="muted">À utiliser si le travail ou l’échange ne peut pas se régler dans la mission.</p>
+    <label>Description <textarea [value]="dispute()" (input)="dispute.set($any($event.target).value)"></textarea></label>
+    <button class="btn-danger" type="button" (click)="openDispute()">Ouvrir un litige</button>
+    @if (disputeId()) {
+      <label>Preuve <input type="file" (change)="addEvidence($event)" /></label>
+    }
   </section>
 }

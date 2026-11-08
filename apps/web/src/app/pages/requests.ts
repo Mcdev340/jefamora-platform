@@ -6,7 +6,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ApiService } from '../core/api.service';
 import { AuthService } from '../core/auth.service';
 import { errorText, fcfa, label, QUOTE_STATUS, RECIPIENT_STATUS, REQUEST_STATUS, URGENCY, zoneLabel } from '../core/labels';
-import { Page, ProfessionalCard, Quote, ServiceRequest, Zone } from '../core/models';
+import { Booking, Page, ProfessionalCard, Quote, ServiceRequest, Zone } from '../core/models';
 
 @Component({
   selector: 'app-requests',
@@ -43,10 +43,12 @@ export class RequestFormPage {
   readonly selected = signal<string[]>(this.initialPros());
   readonly error = signal('');
   readonly zoneLabel = zoneLabel;
+  readonly step = signal(1);
+  readonly prosError = signal('');
   readonly form = this.formBuilder.nonNullable.group({
     zone: ['', Validators.required],
     title: ['', Validators.required],
-    description: ['', Validators.required],
+    description: ['', [Validators.required, Validators.minLength(10)]],
     urgency: ['normal'],
     budget: [''],
     desired_date: [''],
@@ -56,10 +58,53 @@ export class RequestFormPage {
     this.api.get<Page<Zone>>('/catalog/zones/').subscribe({
       next: (page) => this.zones.set(page.results.filter((item) => item.is_active)),
     });
-    this.api.get<Page<ProfessionalCard>>('/professionals/').subscribe({
+    this.api.get<Page<ProfessionalCard>>('/professionals/', { page_size: '100' }).subscribe({
       next: (page) => this.professionals.set(page.results),
-      error: (err) => this.error.set(errorText(err)),
+      error: (err) => this.prosError.set(errorText(err)),
     });
+  }
+
+  visiblePros(): ProfessionalCard[] {
+    const zone = this.form.controls.zone.value;
+    const all = this.professionals();
+    if (!zone) {
+      return all;
+    }
+    const inZone = all.filter((item) => item.zones.some((entry) => entry.id === zone));
+    const kept = all.filter((item) => this.selected().includes(item.id) && !inZone.includes(item));
+    return [...kept, ...inZone];
+  }
+
+  zoneName(): string {
+    const zone = this.zones().find((item) => item.id === this.form.controls.zone.value);
+    return zone ? zoneLabel(zone) : '—';
+  }
+
+  chosenPros(): ProfessionalCard[] {
+    return this.professionals().filter((item) => this.selected().includes(item.id));
+  }
+
+  chosenNames(): string {
+    return this.chosenPros().map((item) => item.business_name).join(', ') || '—';
+  }
+
+  continue(): void {
+    this.error.set('');
+    if (this.step() === 1 && this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.error.set('Indiquez la zone, un titre et une description d’au moins 10 caractères.');
+      return;
+    }
+    if (this.step() === 2 && this.selected().length === 0) {
+      this.error.set('Choisissez au moins un professionnel.');
+      return;
+    }
+    this.step.update((value) => Math.min(value + 1, 3));
+  }
+
+  back(): void {
+    this.error.set('');
+    this.step.update((value) => Math.max(value - 1, 1));
   }
 
   private initialPros(): string[] {
@@ -108,6 +153,7 @@ export class RequestFormPage {
 export class RequestDetailPage {
   private readonly api = inject(ApiService);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly formBuilder = inject(FormBuilder);
   readonly auth = inject(AuthService);
   readonly item = signal<ServiceRequest | null>(null);
@@ -202,12 +248,18 @@ export class RequestDetailPage {
       });
   }
 
+  author(quote: Quote): string {
+    return this.item()?.recipients.find((item) => item.id === quote.recipient)?.professional_name ?? 'Professionnel';
+  }
+
   decide(quoteId: string, action: 'accept' | 'reject'): void {
-    this.api.post(action === 'accept' ? `/quotes/${quoteId}/accept/` : `/quotes/${quoteId}/reject/`).subscribe({
+    this.api.post<Booking>(action === 'accept' ? `/quotes/${quoteId}/accept/` : `/quotes/${quoteId}/reject/`).subscribe({
       next: (body) => {
-        if (action === 'accept' && body && typeof body === 'object' && 'id' in body) {
-          this.notice.set('Devis accepté. La mission est ouverte.');
+        if (action === 'accept' && body?.id) {
+          void this.router.navigate(['/missions', body.id]);
+          return;
         }
+        this.notice.set('Devis refusé.');
         this.load();
       },
       error: (err) => this.error.set(errorText(err)),

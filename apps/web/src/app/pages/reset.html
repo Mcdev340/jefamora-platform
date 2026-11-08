@@ -1,6 +1,8 @@
 <section class="narrow">
-  <p class="kicker">Mot de passe</p>
-  <h1>Le réinitialiser</h1>
+  <header class="page-title">
+    <p class="kicker">Mot de passe</p>
+    <h1>Le réinitialiser</h1>
+  </header>
   @if (error()) { <p class="alert">{{ error() }}</p> }
   @if (message()) { <p class="ok">{{ message() }}</p> }
   <form class="stack panel" [formGroup]="ask" (ngSubmit)="requestCode()">

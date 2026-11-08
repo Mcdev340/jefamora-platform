@@ -135,6 +135,7 @@ export interface ServiceRequest {
     decline_reason: string;
     created_at: string;
   }[];
+  booking_id: string | null;
   created_at: string;
 }
 
@@ -164,11 +165,13 @@ export interface Booking {
   service_request: string;
   client: string;
   professional: string;
+  professional_name: string;
   status: string;
   scheduled_at: string | null;
   completed_at: string | null;
   created_at: string;
   conversation_id: string | null;
+  review: Review | null;
 }
 
 export interface ChatMessage {
@@ -181,7 +184,7 @@ export interface ChatMessage {
 
 export interface Review {
   id: string;
-  booking: string;
+  booking?: string;
   rating: number;
   comment: string;
   professional_reply: string;

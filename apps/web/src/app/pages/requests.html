@@ -1,7 +1,8 @@
 <section class="page-title spread">
   <div>
     <p class="kicker">Demandes</p>
-    <h1>Le travail à faire</h1>
+    <h1>{{ auth.isClient() ? 'Vos demandes' : 'Demandes reçues' }}</h1>
+    <p class="lede">{{ auth.isClient() ? 'Suivez les devis, puis n’en retenez qu’un.' : 'Répondez aux demandes qui vous sont adressées.' }}</p>
   </div>
   @if (auth.isClient()) {
     <a class="btn" routerLink="/demandes/nouvelle">Nouvelle demande</a>
@@ -19,6 +20,12 @@
       <p class="muted">{{ item.recipients.length }} professionnel(s)</p>
     </a>
   } @empty {
-    <p class="muted">Aucune demande pour le moment.</p>
+    <article class="panel">
+      <h2>{{ auth.isClient() ? 'Aucune demande' : 'Rien à traiter' }}</h2>
+      <p class="muted">{{ auth.isClient() ? 'Décrivez un travail et choisissez un ou plusieurs professionnels.' : 'Les demandes apparaissent ici quand un client vous les adresse.' }}</p>
+      @if (auth.isClient()) {
+        <a class="btn" routerLink="/demandes/nouvelle">Créer une demande</a>
+      }
+    </article>
   }
 </div>

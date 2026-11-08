@@ -38,4 +38,8 @@ export class DashboardPage {
   unread(): number {
     return this.notices().filter((item) => !item.is_read).length;
   }
+
+  quotedCount(): number {
+    return this.requests().filter((item) => item.status === 'quoted').length;
+  }
 }

@@ -1,3 +1,7 @@
+<header class="page-title">
+  <p class="kicker">Compte</p>
+  <h1>Votre espace</h1>
+</header>
 <div class="workspace">
 <nav class="tabs">
   <a routerLink="/compte/profil" routerLinkActive="active">Profil</a>
@@ -30,11 +34,15 @@
   @case ('adresses') {
     <section class="stack">
       <h1>Adresses</h1>
-      @for (item of addresses(); track item.id) {
-        <p>{{ item.label }} · {{ item.city }} {{ item.district }}
-          <button class="btn-danger" type="button" (click)="removeAddress(item.id)">Retirer</button>
-        </p>
-      }
+      <div class="cards">
+        @for (item of addresses(); track item.id) {
+          <article class="card">
+            <h3>{{ item.label }}</h3>
+            <p>{{ item.city }} · {{ item.district }}</p>
+            <button class="btn-danger" type="button" (click)="removeAddress(item.id)">Retirer</button>
+          </article>
+        } @empty { <p class="muted">Aucune adresse enregistrée.</p> }
+      </div>
       <div class="filters">
         <label>Libellé <input [value]="address().label" (input)="address.set({ ...address(), label: $any($event.target).value })" /></label>
         <label>Ville <input [value]="address().city" (input)="address.set({ ...address(), city: $any($event.target).value })" /></label>
@@ -46,23 +54,28 @@
   @case ('favoris') {
     <section>
       <h1>Favoris</h1>
-      @for (item of favorites(); track item.id) {
-        <p><a [routerLink]="['/professionnels', item.professional]">{{ item.name }}</a>
-          <button class="btn-ghost" type="button" (click)="removeFavorite(item.professional)">Retirer</button>
-        </p>
-      } @empty { <p class="muted">Aucun favori.</p> }
+      <div class="cards">
+        @for (item of favorites(); track item.id) {
+          <article class="card">
+            <h3><a [routerLink]="['/professionnels', item.professional]">{{ item.name }}</a></h3>
+            <button class="btn-ghost" type="button" (click)="removeFavorite(item.professional)">Retirer</button>
+          </article>
+        } @empty { <p class="muted">Aucun favori. Vous pouvez en ajouter depuis une fiche.</p> }
+      </div>
     </section>
   }
   @case ('notifications') {
     <section>
       <h1>Notifications</h1>
-      @for (item of notices(); track item.id) {
-        <article class="card">
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.body }}</p>
-          @if (!item.is_read) { <button class="btn-ghost" type="button" (click)="markRead(item.id)">Marquer lu</button> }
-        </article>
-      } @empty { <p class="muted">Rien de nouveau.</p> }
+      <div class="cards">
+        @for (item of notices(); track item.id) {
+          <article class="card" [class.unread]="!item.is_read">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.body }}</p>
+            @if (!item.is_read) { <button class="btn-ghost" type="button" (click)="markRead(item.id)">Marquer lu</button> }
+          </article>
+        } @empty { <p class="muted">Rien de nouveau.</p> }
+      </div>
     </section>
   }
   @case ('sessions') {

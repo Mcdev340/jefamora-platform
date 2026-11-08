@@ -8,6 +8,8 @@ from apps.reviews.models import Review
 
 class BookingSerializer(serializers.ModelSerializer):
     conversation_id = serializers.SerializerMethodField()
+    professional_name = serializers.CharField(source="professional.business_name", read_only=True)
+    review = serializers.SerializerMethodField()
 
     class Meta:
         model = Booking
@@ -17,11 +19,13 @@ class BookingSerializer(serializers.ModelSerializer):
             "service_request",
             "client",
             "professional",
+            "professional_name",
             "status",
             "scheduled_at",
             "completed_at",
             "created_at",
             "conversation_id",
+            "review",
         )
 
     def get_conversation_id(self, obj):
@@ -29,6 +33,21 @@ class BookingSerializer(serializers.ModelSerializer):
             return str(obj.conversation.id)
         except ObjectDoesNotExist:
             return None
+
+    def get_review(self, obj):
+        try:
+            review = obj.review
+        except ObjectDoesNotExist:
+            return None
+        return {
+            "id": str(review.id),
+            "rating": review.rating,
+            "comment": review.comment,
+            "professional_reply": review.professional_reply,
+            "status": review.status,
+            "editable_until": review.editable_until.isoformat() if review.editable_until else None,
+            "created_at": review.created_at.isoformat(),
+        }
 
 
 class MessageSerializer(serializers.ModelSerializer):
