@@ -1,0 +1,72 @@
+@if (error()) { <p class="alert">{{ error() }}</p> }
+@if (notice()) { <p class="ok">{{ notice() }}</p> }
+@if (booking(); as current) {
+  <section class="split">
+    <article>
+      <p class="kicker">Mission</p>
+      <h1>{{ statusLabel(current.status) }}</h1>
+      <p class="muted">Ouverte le {{ current.created_at | date: 'd MMMM y' }}</p>
+      <div class="row">
+        @if (auth.isProfessional() && current.status === 'confirmed') {
+          <button class="btn" type="button" (click)="act('start')">Démarrer</button>
+        }
+        @if (auth.isProfessional() && current.status === 'in_progress') {
+          <button class="btn" type="button" (click)="act('request-completion')">Déclarer la fin</button>
+        }
+        @if (auth.isClient() && current.status === 'completed_by_professional') {
+          <button class="btn" type="button" (click)="act('confirm-completion')">Confirmer la fin</button>
+        }
+      </div>
+    </article>
+    <aside class="panel stack">
+      <h2>Litige</h2>
+      <label>Description <textarea [value]="dispute()" (input)="dispute.set($any($event.target).value)"></textarea></label>
+      <button class="btn-danger" type="button" (click)="openDispute()">Ouvrir un litige</button>
+      @if (disputeId()) {
+        <label>Preuve <input type="file" (change)="addEvidence($event)" /></label>
+      }
+    </aside>
+  </section>
+
+  <section class="split">
+    <article class="panel">
+      <h2>Messages</h2>
+      <div class="thread">
+        @for (message of messages(); track message.id) {
+          <div class="bubble" [class.mine]="mine(message.sender)">
+            <p>{{ message.content }}</p>
+            <small class="muted">{{ message.created_at | date: 'd MMM, HH:mm' }}</small>
+          </div>
+        } @empty { <p class="muted">Pas encore de message.</p> }
+      </div>
+      <div class="row" style="margin-top: 0.8rem">
+        <input [value]="draft()" (input)="draft.set($any($event.target).value)" placeholder="Écrire au contact de la mission" />
+        <button class="btn" type="button" (click)="send()">Envoyer</button>
+      </div>
+    </article>
+    <aside class="panel stack">
+      <h2>Avis</h2>
+      @if (auth.isClient() && current.status === 'confirmed_by_client') {
+        <label>Note
+          <select [value]="rating()" (change)="rating.set(+$any($event.target).value)">
+            <option [value]="5">5</option>
+            <option [value]="4">4</option>
+            <option [value]="3">3</option>
+            <option [value]="2">2</option>
+            <option [value]="1">1</option>
+          </select>
+        </label>
+        <label>Commentaire <textarea [value]="comment()" (input)="comment.set($any($event.target).value)"></textarea></label>
+        <button class="btn" type="button" (click)="publishReview()">Publier</button>
+      }
+      @if (review(); as currentReview) {
+        <p class="stars">{{ currentReview.rating }} / 5</p>
+        <p>{{ currentReview.comment }}</p>
+        @if (auth.isProfessional()) {
+          <label>Réponse <textarea [value]="reply()" (input)="reply.set($any($event.target).value)"></textarea></label>
+          <button class="btn-ghost" type="button" (click)="sendReply()">Répondre</button>
+        }
+      }
+    </aside>
+  </section>
+}

@@ -1,0 +1,24 @@
+<section class="page-title spread">
+  <div>
+    <p class="kicker">Demandes</p>
+    <h1>Le travail à faire</h1>
+  </div>
+  @if (auth.isClient()) {
+    <a class="btn" routerLink="/demandes/nouvelle">Nouvelle demande</a>
+  }
+</section>
+@if (error()) { <p class="alert">{{ error() }}</p> }
+<div class="cards">
+  @for (item of items(); track item.id) {
+    <a class="card" [routerLink]="['/demandes', item.id]">
+      <div class="spread">
+        <h3>{{ item.title }}</h3>
+        <span class="badge neutral">{{ statusLabel(item.status) }}</span>
+      </div>
+      <p>{{ item.description }}</p>
+      <p class="muted">{{ item.recipients.length }} professionnel(s)</p>
+    </a>
+  } @empty {
+    <p class="muted">Aucune demande pour le moment.</p>
+  }
+</div>

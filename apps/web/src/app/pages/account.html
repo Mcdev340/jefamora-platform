@@ -1,0 +1,105 @@
+<div class="workspace">
+<nav class="tabs">
+  <a routerLink="/compte/profil" routerLinkActive="active">Profil</a>
+  @if (auth.isClient()) {
+    <a routerLink="/compte/adresses" routerLinkActive="active">Adresses</a>
+    <a routerLink="/compte/favoris" routerLinkActive="active">Favoris</a>
+  }
+  <a routerLink="/compte/notifications" routerLinkActive="active">Notifications</a>
+  <a routerLink="/compte/sessions" routerLinkActive="active">Sessions</a>
+  <a routerLink="/compte/support" routerLinkActive="active">Support</a>
+  <a routerLink="/compte/confidentialite" routerLinkActive="active">Confidentialité</a>
+</nav>
+@if (error()) { <p class="alert">{{ error() }}</p> }
+@if (notice()) { <p class="ok">{{ notice() }}</p> }
+
+@switch (section()) {
+  @case ('profil') {
+    <section class="stack narrow">
+      <h1>Votre compte</h1>
+      <p class="muted">{{ auth.profile()?.email }} · {{ auth.profile()?.role === 'professional' ? 'Professionnel' : 'Client' }}</p>
+      <label>Prénom <input [value]="firstName()" (input)="firstName.set($any($event.target).value)" /></label>
+      <label>Nom <input [value]="lastName()" (input)="lastName.set($any($event.target).value)" /></label>
+      <label>Téléphone <input [value]="phone()" (input)="phone.set($any($event.target).value)" /></label>
+      @if (auth.isClient()) {
+        <label>Raison sociale <input [value]="company()" (input)="company.set($any($event.target).value)" /></label>
+      }
+      <button class="btn" type="button" (click)="saveProfile()">Enregistrer</button>
+    </section>
+  }
+  @case ('adresses') {
+    <section class="stack">
+      <h1>Adresses</h1>
+      @for (item of addresses(); track item.id) {
+        <p>{{ item.label }} · {{ item.city }} {{ item.district }}
+          <button class="btn-danger" type="button" (click)="removeAddress(item.id)">Retirer</button>
+        </p>
+      }
+      <div class="filters">
+        <label>Libellé <input [value]="address().label" (input)="address.set({ ...address(), label: $any($event.target).value })" /></label>
+        <label>Ville <input [value]="address().city" (input)="address.set({ ...address(), city: $any($event.target).value })" /></label>
+        <label>Quartier <input [value]="address().district" (input)="address.set({ ...address(), district: $any($event.target).value })" /></label>
+      </div>
+      <button class="btn" type="button" (click)="addAddress()">Ajouter</button>
+    </section>
+  }
+  @case ('favoris') {
+    <section>
+      <h1>Favoris</h1>
+      @for (item of favorites(); track item.id) {
+        <p><a [routerLink]="['/professionnels', item.professional]">{{ item.name }}</a>
+          <button class="btn-ghost" type="button" (click)="removeFavorite(item.professional)">Retirer</button>
+        </p>
+      } @empty { <p class="muted">Aucun favori.</p> }
+    </section>
+  }
+  @case ('notifications') {
+    <section>
+      <h1>Notifications</h1>
+      @for (item of notices(); track item.id) {
+        <article class="card">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.body }}</p>
+          @if (!item.is_read) { <button class="btn-ghost" type="button" (click)="markRead(item.id)">Marquer lu</button> }
+        </article>
+      } @empty { <p class="muted">Rien de nouveau.</p> }
+    </section>
+  }
+  @case ('sessions') {
+    <section>
+      <h1>Appareils connectés</h1>
+      @for (item of sessions(); track item.id) {
+        <p>{{ item.user_agent || 'Appareil' }} · {{ item.ip_address || 'IP inconnue' }}
+          @if (!item.revoked_at) { <button class="btn-danger" type="button" (click)="revoke(item.id)">Révoquer</button> }
+        </p>
+      }
+    </section>
+  }
+  @case ('support') {
+    <section class="stack">
+      <h1>Support</h1>
+      @for (item of tickets(); track item.id) {
+        <p>{{ item.subject }} · {{ item.status }}</p>
+      }
+      <label>Sujet <input [value]="ticket().subject" (input)="ticket.set({ ...ticket(), subject: $any($event.target).value })" /></label>
+      <label>Message <textarea [value]="ticket().description" (input)="ticket.set({ ...ticket(), description: $any($event.target).value })"></textarea></label>
+      <label>Priorité
+        <select [value]="ticket().priority" (change)="ticket.set({ ...ticket(), priority: $any($event.target).value })">
+          <option value="low">Basse</option>
+          <option value="normal">Normale</option>
+          <option value="high">Haute</option>
+        </select>
+      </label>
+      <button class="btn" type="button" (click)="openTicket()">Ouvrir un ticket</button>
+    </section>
+  }
+  @case ('confidentialite') {
+    <section class="stack narrow">
+      <h1>Vos données</h1>
+      <button class="btn" type="button" (click)="grantPrivacy()">Confirmer le consentement confidentialité</button>
+      <label>Motif de suppression <textarea [value]="deletionReason()" (input)="deletionReason.set($any($event.target).value)"></textarea></label>
+      <button class="btn-danger" type="button" (click)="askDeletion()">Demander la suppression du compte</button>
+    </section>
+  }
+}
+</div>

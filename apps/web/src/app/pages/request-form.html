@@ -1,0 +1,36 @@
+<section class="wide">
+  <p class="kicker">Nouvelle demande</p>
+  <h1>Décrire le travail</h1>
+  <form class="stack panel" [formGroup]="form" (ngSubmit)="submit()">
+    @if (error()) { <p class="alert">{{ error() }}</p> }
+    <label>Zone
+      <select formControlName="zone">
+        <option value="">Choisir</option>
+        @for (zone of zones(); track zone.id) {
+          <option [value]="zone.id">{{ zoneLabel(zone) }}</option>
+        }
+      </select>
+    </label>
+    <label>Titre <input formControlName="title" /></label>
+    <label>Description <textarea formControlName="description"></textarea></label>
+    <label>Urgence
+      <select formControlName="urgency">
+        <option value="low">Faible</option>
+        <option value="normal">Normale</option>
+        <option value="urgent">Urgente</option>
+      </select>
+    </label>
+    <label>Budget indicatif, FCFA <input formControlName="budget" inputmode="numeric" /></label>
+    <label>Date souhaitée <input type="datetime-local" formControlName="desired_date" /></label>
+    <fieldset>
+      <legend>Professionnels</legend>
+      @for (pro of professionals(); track pro.id) {
+        <label class="check">
+          <input type="checkbox" [checked]="selected().includes(pro.id)" (change)="toggle(pro.id, $any($event.target).checked)" />
+          {{ pro.business_name }}
+        </label>
+      } @empty { <p class="muted">Aucun professionnel disponible.</p> }
+    </fieldset>
+    <button class="btn" type="submit">Envoyer la demande</button>
+  </form>
+</section>

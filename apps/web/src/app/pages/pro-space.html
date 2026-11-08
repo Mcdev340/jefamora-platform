@@ -1,0 +1,136 @@
+<div class="workspace">
+<nav class="tabs">
+  <a routerLink="/espace-pro/profil" routerLinkActive="active">Profil</a>
+  <a routerLink="/espace-pro/services" routerLinkActive="active">Services</a>
+  <a routerLink="/espace-pro/zones" routerLinkActive="active">Zones</a>
+  <a routerLink="/espace-pro/disponibilites" routerLinkActive="active">Disponibilités</a>
+  <a routerLink="/espace-pro/realisations" routerLinkActive="active">Réalisations</a>
+  <a routerLink="/espace-pro/verification" routerLinkActive="active">Badge</a>
+</nav>
+@if (error()) { <p class="alert">{{ error() }}</p> }
+@if (notice()) { <p class="ok">{{ notice() }}</p> }
+
+@switch (section()) {
+  @case ('profil') {
+    <section class="stack narrow">
+      <h1>Votre fiche</h1>
+      <label>Nom professionnel <input [value]="businessName()" (input)="businessName.set($any($event.target).value)" /></label>
+      <label>Présentation <textarea [value]="biography()" (input)="biography.set($any($event.target).value)"></textarea></label>
+      <label>Années d’expérience <input [value]="years()" (input)="years.set($any($event.target).value)" /></label>
+      <button class="btn" type="button" (click)="saveProfile()">Enregistrer</button>
+    </section>
+  }
+  @case ('services') {
+    <section class="stack">
+      <h1>Services</h1>
+      <div class="cards">
+        @for (service of services(); track service.id) {
+          <article class="card">
+            <h3>{{ service.title }}</h3>
+            <p>{{ fcfa(service.starting_price) }}</p>
+            <button class="btn-danger" type="button" (click)="removeService(service.id)">Retirer</button>
+          </article>
+        }
+      </div>
+      <div class="stack panel">
+        <label>Métier
+          <select [value]="serviceDraft().trade" (change)="patchService('trade', $any($event.target).value)">
+            <option value="">Choisir</option>
+            @for (trade of trades(); track trade.id) { <option [value]="trade.id">{{ trade.name }}</option> }
+          </select>
+        </label>
+        <label>Spécialité
+          <select [value]="serviceDraft().specialty" (change)="patchService('specialty', $any($event.target).value)">
+            <option value="">Aucune</option>
+            @for (item of specialties(); track item.id) {
+              @if (item.trade === serviceDraft().trade) { <option [value]="item.id">{{ item.name }}</option> }
+            }
+          </select>
+        </label>
+        <label>Titre <input [value]="serviceDraft().title" (input)="patchService('title', $any($event.target).value)" /></label>
+        <label>Description <textarea [value]="serviceDraft().description" (input)="patchService('description', $any($event.target).value)"></textarea></label>
+        <label>Prix de départ FCFA <input [value]="serviceDraft().starting_price" (input)="patchService('starting_price', $any($event.target).value)" /></label>
+        <button class="btn" type="button" (click)="addService()">Ajouter</button>
+      </div>
+    </section>
+  }
+  @case ('zones') {
+    <section class="stack">
+      <h1>Zones d’intervention</h1>
+      @for (zone of zones(); track zone.id) {
+        <label class="check">
+          <input type="checkbox" [checked]="selectedZones().includes(zone.id)" (change)="toggleZone(zone.id, $any($event.target).checked)" />
+          {{ zoneLabel(zone) }}
+        </label>
+      }
+      <button class="btn" type="button" (click)="saveZones()">Enregistrer les zones</button>
+    </section>
+  }
+  @case ('disponibilites') {
+    <section class="stack">
+      <h1>Créneaux</h1>
+      @for (slot of slots(); track slot.id) {
+        <p>{{ weekdays[slot.weekday] }} · {{ slot.start_time }} – {{ slot.end_time }}
+          <button class="btn-danger" type="button" (click)="removeSlot(slot.id)">Retirer</button>
+        </p>
+      }
+      <div class="filters">
+        <label>Jour
+          <select [value]="slotDraft().weekday" (change)="patchSlot('weekday', $any($event.target).value)">
+            @for (day of weekdays; track day; let index = $index) { <option [value]="index">{{ day }}</option> }
+          </select>
+        </label>
+        <label>Début <input type="time" [value]="slotDraft().start_time" (input)="patchSlot('start_time', $any($event.target).value)" /></label>
+        <label>Fin <input type="time" [value]="slotDraft().end_time" (input)="patchSlot('end_time', $any($event.target).value)" /></label>
+      </div>
+      <button class="btn" type="button" (click)="addSlot()">Ajouter le créneau</button>
+    </section>
+  }
+  @case ('realisations') {
+    <section class="stack">
+      <h1>Réalisations</h1>
+      @for (work of works(); track work.id) {
+        <article class="card">
+          <h3>{{ work.title }}</h3>
+          <p class="badge neutral">{{ work.status }}</p>
+          <p>{{ work.media.length }} photo(s)</p>
+          <label>Photo <input type="file" (change)="uploadMedia(work.id, $event)" /></label>
+          <button class="btn" type="button" (click)="publish(work.id)">Publier</button>
+        </article>
+      }
+      <div class="stack panel">
+        <label>Métier
+          <select [value]="workDraft().trade" (change)="patchWork('trade', $any($event.target).value)">
+            <option value="">Choisir</option>
+            @for (trade of trades(); track trade.id) { <option [value]="trade.id">{{ trade.name }}</option> }
+          </select>
+        </label>
+        <label>Zone
+          <select [value]="workDraft().zone" (change)="patchWork('zone', $any($event.target).value)">
+            <option value="">Aucune</option>
+            @for (zone of zones(); track zone.id) { <option [value]="zone.id">{{ zoneLabel(zone) }}</option> }
+          </select>
+        </label>
+        <label>Titre <input [value]="workDraft().title" (input)="patchWork('title', $any($event.target).value)" /></label>
+        <label>Description <textarea [value]="workDraft().description" (input)="patchWork('description', $any($event.target).value)"></textarea></label>
+        <button class="btn" type="button" (click)="addWork()">Créer</button>
+      </div>
+    </section>
+  }
+  @case ('verification') {
+    <section class="stack narrow">
+      <h1>Profil vérifié Jefamora</h1>
+      <p class="muted">Ce badge est une validation interne. Il ne remplace pas une certification officielle.</p>
+      @if (verification(); as folder) {
+        <p>Statut : {{ folder.status }}</p>
+        @if (folder.admin_comment) { <p>{{ folder.admin_comment }}</p> }
+        @for (document of folder.documents; track document.id) {
+          <p>{{ document.original_name }}</p>
+        }
+      }
+      <label>Pièce d’identité <input type="file" (change)="uploadId($event)" /></label>
+      <button class="btn" type="button" (click)="submitCase()">Soumettre le dossier</button>
+    </section>
+  }
+}
+</div>

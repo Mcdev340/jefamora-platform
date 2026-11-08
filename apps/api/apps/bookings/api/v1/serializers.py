@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
 from apps.bookings.models import Booking
@@ -6,6 +7,8 @@ from apps.reviews.models import Review
 
 
 class BookingSerializer(serializers.ModelSerializer):
+    conversation_id = serializers.SerializerMethodField()
+
     class Meta:
         model = Booking
         fields = (
@@ -18,7 +21,14 @@ class BookingSerializer(serializers.ModelSerializer):
             "scheduled_at",
             "completed_at",
             "created_at",
+            "conversation_id",
         )
+
+    def get_conversation_id(self, obj):
+        try:
+            return str(obj.conversation.id)
+        except ObjectDoesNotExist:
+            return None
 
 
 class MessageSerializer(serializers.ModelSerializer):

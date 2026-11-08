@@ -1,0 +1,67 @@
+@if (error()) { <p class="alert">{{ error() }}</p> }
+@if (notice()) { <p class="ok">{{ notice() }}</p> }
+@if (item(); as current) {
+  <section class="split">
+    <article>
+      <p class="kicker">Demande</p>
+      <div class="spread">
+        <h1>{{ current.title }}</h1>
+        <span class="badge">{{ statusLabel(current.status) }}</span>
+      </div>
+      <p>{{ current.description }}</p>
+      <p class="muted">{{ urgencyLabel(current.urgency) }} · budget {{ fcfa(current.budget) }}</p>
+      @if (auth.isClient() && (current.status === 'open' || current.status === 'quoted')) {
+        <button class="btn-danger" type="button" (click)="cancel()">Annuler la demande</button>
+      }
+    </article>
+    <aside class="panel">
+      <h2>Destinataires</h2>
+      @for (recipient of current.recipients; track recipient.id) {
+        <p><a [routerLink]="['/professionnels', recipient.professional]">{{ recipient.professional_name }}</a> · {{ recipientLabel(recipient.status) }}</p>
+        @if (recipient.decline_reason) { <p class="muted">{{ recipient.decline_reason }}</p> }
+      }
+    </aside>
+  </section>
+
+  @if (auth.isProfessional() && current.status !== 'booked' && current.status !== 'cancelled') {
+    <section class="panel stack">
+      <h2>Répondre</h2>
+      <label>Motif de refus <input [value]="declineReason()" (input)="declineReason.set($any($event.target).value)" /></label>
+      <button class="btn-ghost" type="button" (click)="decline()">Décliner</button>
+      <form class="stack" [formGroup]="quoteForm" (ngSubmit)="sendQuote()">
+        <h3>Envoyer un devis</h3>
+        <label>Ligne <input formControlName="label" /></label>
+        <label>Quantité <input formControlName="quantity" /></label>
+        <label>Prix unitaire FCFA <input formControlName="unit_price" /></label>
+        <label>Délai <input formControlName="estimated_delay" /></label>
+        <label>Conditions <textarea formControlName="conditions"></textarea></label>
+        <button class="btn" type="submit">Envoyer le devis</button>
+      </form>
+    </section>
+  }
+
+  <section>
+    <h2>Devis</h2>
+    <div class="cards">
+      @for (quote of quotes(); track quote.id) {
+        <article class="card">
+          <div class="spread">
+            <h3>{{ fcfa(quote.total_amount) }}</h3>
+            <span class="badge neutral">{{ quoteLabel(quote.status) }}</span>
+          </div>
+          <p>{{ quote.estimated_delay }}</p>
+          <p class="muted">{{ quote.conditions }}</p>
+          @for (line of quote.lines; track line.id) {
+            <p>{{ line.label }} · {{ line.quantity }} × {{ fcfa(line.unit_price) }}</p>
+          }
+          @if (auth.isClient() && quote.status === 'sent') {
+            <div class="row">
+              <button class="btn" type="button" (click)="decide(quote.id, 'accept')">Accepter</button>
+              <button class="btn-ghost" type="button" (click)="decide(quote.id, 'reject')">Refuser</button>
+            </div>
+          }
+        </article>
+      } @empty { <p class="muted">Pas encore de devis.</p> }
+    </div>
+  </section>
+}

@@ -1,0 +1,79 @@
+<section class="page-title">
+  <p class="kicker">Tableau de bord</p>
+  <h1>Bonjour {{ auth.profile()?.first_name || auth.profile()?.email }}</h1>
+  <p class="lede">
+    @if (auth.isProfessional()) {
+      Votre atelier, vos demandes reçues et vos missions.
+    } @else {
+      Vos demandes, vos devis et vos missions.
+    }
+  </p>
+</section>
+
+@if (error()) { <p class="alert">{{ error() }}</p> }
+
+<section class="metrics">
+  <article class="metric"><strong>{{ requests().length }}</strong><span class="muted">demandes</span></article>
+  <article class="metric"><strong>{{ bookings().length }}</strong><span class="muted">missions</span></article>
+  <article class="metric"><strong>{{ unread() }}</strong><span class="muted">notifications non lues</span></article>
+  <article class="metric">
+    <strong>{{ auth.isProfessional() ? (auth.profile()?.badge_verified ? 'Oui' : 'Non') : 'Client' }}</strong>
+    <span class="muted">{{ auth.isProfessional() ? 'badge vérifié' : 'type de compte' }}</span>
+  </article>
+</section>
+
+<section class="audience">
+  <article class="client stack">
+    <h2>À faire</h2>
+    @if (auth.isClient()) {
+      <a class="btn" routerLink="/demandes/nouvelle">Nouvelle demande</a>
+      <a class="btn-ghost" routerLink="/professionnels">Chercher un professionnel</a>
+    }
+    @if (auth.isProfessional()) {
+      <a class="btn" routerLink="/espace-pro/profil">Compléter la fiche</a>
+      <a class="btn-ghost" routerLink="/espace-pro/verification">Envoyer le badge</a>
+      <a class="btn-ghost" routerLink="/demandes">Voir les demandes reçues</a>
+    }
+    <a class="btn-ghost" routerLink="/compte/notifications">Notifications</a>
+  </article>
+  <article class="panel stack">
+    <h2>Dernières notifications</h2>
+    @for (item of notices().slice(0, 4); track item.id) {
+      <p><strong>{{ item.title }}</strong><br /><span class="muted">{{ item.body }}</span></p>
+    } @empty {
+      <p class="muted">Rien pour le moment. Les devis, messages et avis arriveront ici.</p>
+    }
+  </article>
+</section>
+
+<section>
+  <div class="section-head">
+    <h2>Demandes</h2>
+    <a routerLink="/demandes">Tout voir</a>
+  </div>
+  <div class="cards">
+    @for (item of requests().slice(0, 4); track item.id) {
+      <a class="card" [routerLink]="['/demandes', item.id]">
+        <span class="badge neutral">{{ requestLabel(item.status) }}</span>
+        <h3>{{ item.title }}</h3>
+        <p class="muted">{{ item.recipients.length }} destinataire(s)</p>
+      </a>
+    } @empty { <p class="muted">Aucune demande.</p> }
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <h2>Missions</h2>
+    <a routerLink="/missions">Tout voir</a>
+  </div>
+  <div class="cards">
+    @for (item of bookings().slice(0, 4); track item.id) {
+      <a class="card" [routerLink]="['/missions', item.id]">
+        <span class="badge">{{ bookingLabel(item.status) }}</span>
+        <h3>Mission</h3>
+        <p class="muted">Messages, fin des travaux, avis ou litige.</p>
+      </a>
+    } @empty { <p class="muted">Aucune mission. Une mission naît quand un devis est accepté.</p> }
+  </div>
+</section>

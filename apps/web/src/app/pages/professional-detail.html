@@ -1,0 +1,80 @@
+@if (error()) { <p class="alert">{{ error() }}</p> }
+@if (notice()) { <p class="ok">{{ notice() }}</p> }
+@if (profile(); as item) {
+  <header class="profile-hero">
+    <p class="kicker">Fiche professionnelle</p>
+    <div class="spread">
+      <h1>{{ item.business_name }}</h1>
+      @if (item.is_verified) { <span class="badge">Profil vérifié Jefamora</span> }
+    </div>
+    <p class="stars">{{ item.average_rating }} / 5</p>
+    <p>{{ item.biography || 'Ce professionnel n’a pas encore rédigé sa présentation.' }}</p>
+    <p>
+      {{ item.years_of_experience ? item.years_of_experience + ' ans d’expérience' : 'Expérience non renseignée' }}
+      · {{ item.zones.map(zoneLabel).join(' · ') }}
+    </p>
+    <div class="row">
+      @if (auth.isClient()) {
+        <button class="btn" type="button" (click)="askQuote()">Demander un devis</button>
+        <button class="btn-ghost" type="button" (click)="saveFavorite()">Ajouter aux favoris</button>
+      }
+    </div>
+  </header>
+  <section class="panel">
+    <h2>Disponibilités</h2>
+      @for (slot of item.availabilities; track slot.id) {
+        <p>{{ weekdays[slot.weekday] }} · {{ slot.start_time }} – {{ slot.end_time }}</p>
+      } @empty { <p class="muted">Aucun créneau publié.</p> }
+  </section>
+
+  <section>
+    <h2>Services</h2>
+    <div class="cards">
+      @for (service of item.services; track service.id) {
+        <article class="card">
+          <h3>{{ service.title }}</h3>
+          <p>{{ service.description }}</p>
+          <strong>À partir de {{ fcfa(service.starting_price) }}</strong>
+        </article>
+      } @empty { <p class="muted">Aucun service publié.</p> }
+    </div>
+  </section>
+
+  <section>
+    <h2>Réalisations</h2>
+    <div class="cards">
+      @for (work of item.portfolio; track work.id) {
+        <article class="card">
+          <h3>{{ work.title }}</h3>
+          <p>{{ work.description }}</p>
+          <p class="muted">{{ work.media.length }} média(s)</p>
+        </article>
+      } @empty { <p class="muted">Pas encore de réalisation publiée.</p> }
+    </div>
+  </section>
+
+  <section>
+    <h2>Avis</h2>
+    @for (review of item.reviews; track review.id) {
+      <article class="card">
+        <p class="stars">{{ review.rating }} / 5</p>
+        <p>{{ review.comment }}</p>
+        @if (review.professional_reply) { <p class="muted">Réponse : {{ review.professional_reply }}</p> }
+      </article>
+    } @empty { <p class="muted">Aucun avis publié.</p> }
+  </section>
+
+  <section class="panel narrow">
+    <h2>Signaler cette fiche</h2>
+    <label>Motif
+      <select [value]="reason()" (change)="reason.set($any($event.target).value)">
+        <option value="fraud">Contenu mensonger</option>
+        <option value="abuse">Comportement abusif</option>
+        <option value="inappropriate">Contenu inapproprié</option>
+        <option value="other">Autre</option>
+      </select>
+    </label>
+    <label>Précision <textarea [value]="description()" (input)="description.set($any($event.target).value)"></textarea></label>
+    <button class="btn-danger" type="button" (click)="report()">Envoyer le signalement</button>
+  </section>
+}

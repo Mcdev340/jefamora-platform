@@ -1,0 +1,67 @@
+@if (!onAuth()) {
+<header class="topbar">
+  <div class="frame topbar-inner">
+    <a class="brand" routerLink="/">
+      <span class="mark">J</span>
+      <span>
+        <strong>Jefamora</strong>
+        <small>Clients et professionnels</small>
+      </span>
+    </a>
+    <nav class="nav">
+      <a routerLink="/professionnels" routerLinkActive="active">Trouver un professionnel</a>
+      <a routerLink="/" fragment="parcours">Comment ça marche</a>
+      @if (auth.isLoggedIn()) {
+        <a routerLink="/tableau" routerLinkActive="active">Tableau</a>
+        <a routerLink="/demandes" routerLinkActive="active">Demandes</a>
+        <a routerLink="/missions" routerLinkActive="active">Missions</a>
+        @if (auth.isProfessional()) {
+          <a routerLink="/espace-pro/profil" routerLinkActive="active">Atelier</a>
+        }
+        <a routerLink="/compte/profil" routerLinkActive="active">Compte</a>
+        <button class="btn-ghost" type="button" (click)="leave()">Quitter</button>
+      } @else {
+        <a routerLink="/inscription">Devenir professionnel</a>
+        <a routerLink="/connexion">Connexion</a>
+        <a class="btn" routerLink="/inscription">Inscription</a>
+      }
+    </nav>
+  </div>
+</header>
+}
+<main class="main">
+  <div [class.frame]="!onHome() && !onAuth()">
+    <router-outlet />
+  </div>
+</main>
+@if (!onAuth()) {
+<footer class="site-footer">
+  <div class="frame footer-grid">
+    <div class="footer-brand">
+      <a class="brand" routerLink="/">
+        <span class="mark">J</span>
+        <span class="word"><span>Jefa</span><span>mora</span></span>
+      </a>
+      <p>La plateforme qui connecte clients et professionnels qualifiés au Sénégal.</p>
+    </div>
+    <div>
+      <h3>Plateforme</h3>
+      <a routerLink="/professionnels">Trouver un professionnel</a>
+      <a routerLink="/inscription">Devenir professionnel</a>
+      <a routerLink="/" fragment="parcours">Comment ça marche</a>
+    </div>
+    <div>
+      <h3>Compte</h3>
+      <a routerLink="/connexion">Connexion</a>
+      <a routerLink="/inscription">Inscription</a>
+      <a routerLink="/compte/support">Support</a>
+    </div>
+    <div>
+      <h3>Engagement</h3>
+      <a routerLink="/espace-pro/verification">Profil vérifié</a>
+      <a routerLink="/compte/confidentialite">Confidentialité</a>
+    </div>
+  </div>
+  <p class="footer-copy">© 2026 Jefamora. Tous droits réservés. Fait au Sénégal.</p>
+</footer>
+}
