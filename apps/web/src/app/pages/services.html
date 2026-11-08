@@ -1,0 +1,78 @@
+<section class="page-hero photo-hero photo-services">
+  <div class="frame">
+    <p class="eyebrow">Services</p>
+    <h1>De la recherche jusqu’à l’avis</h1>
+    <p>Quatre services, dans l’ordre d’une mission. Le catalogue en dessous est celui qui est réellement en ligne.</p>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="frame">
+    <figure class="wide-photo">
+      <img src="/services-work.jpg" alt="Électricien, plombier et menuisier au travail" />
+    </figure>
+  </div>
+  <div class="frame service-list">
+    <article>
+      <span>01</span>
+      <div>
+        <h2>Trouver un professionnel</h2>
+        <p>L’annuaire filtre par métier et par zone. Sans compte confirmé, les fiches restent fermées : les métiers et les zones sont publics, les professionnels demandent un e-mail vérifié.</p>
+        <a routerLink="/professionnels">Ouvrir l’annuaire</a>
+      </div>
+    </article>
+    <article>
+      <span>02</span>
+      <div>
+        <h2>Demandes et devis</h2>
+        <p>Le client envoie une demande. Plusieurs professionnels peuvent répondre. Chaque devis peut détailler des lignes en FCFA. Un seul devis accepté devient la mission : il n’y a pas un second chemin entre la demande et la réservation.</p>
+        <a routerLink="/demandes/nouvelle">Préparer une demande</a>
+      </div>
+    </article>
+    <article>
+      <span>03</span>
+      <div>
+        <h2>Suivi de mission</h2>
+        <p>La mission reprend le client, le professionnel et la demande du devis accepté. Les deux suivent le démarrage, la fin déclarée et la confirmation. Les messages n’existent que pour cette mission.</p>
+        <a routerLink="/missions">Voir les missions</a>
+      </div>
+    </article>
+    <article>
+      <span>04</span>
+      <div>
+        <h2>Profil vérifié</h2>
+        <p>Le professionnel dépose sa pièce et un justificatif, puis soumet le dossier. L’approbation pose le badge et rend le profil visible dans la même action. Le badge reste une validation Jefamora.</p>
+        <a routerLink="/espace-pro/verification">Déposer un dossier</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="sheet sheet-alt">
+  <div class="frame">
+    <p class="eyebrow">Catalogue</p>
+    <h2>Les métiers disponibles</h2>
+    <p class="sheet-lead">Chaque carte ouvre l’annuaire sur ce métier.</p>
+    @for (category of categories(); track category.id) {
+      <h3 class="catalog-title">{{ category.name }}</h3>
+      <div class="catalog-grid">
+        @for (trade of tradesOf(category.id); track trade.id) {
+          <a [routerLink]="['/professionnels']" [queryParams]="{ trade: trade.id }">{{ trade.name }}</a>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="frame split-cards">
+    <article>
+      <h2>Côté client</h2>
+      <p>Choisissez le métier, la zone et l’urgence. Ajoutez une adresse. Comparez les devis. Confirmez la fin des travaux avant l’avis. Vous pouvez modifier la note pendant 48 heures.</p>
+    </article>
+    <article>
+      <h2>Côté professionnel</h2>
+      <p>Renseignez la fiche, les services, les zones et les disponibilités. Publiez des réalisations rattachées à un métier. Répondez, refusez, ou demandez la fin de la mission.</p>
+    </article>
+  </div>
+</section>

@@ -13,6 +13,7 @@ import { AuthService } from '../core/auth.service';
     class: 'shell',
     '[class.on-home]': 'onHome()',
     '[class.on-auth]': 'onAuth()',
+    '[class.on-wide]': 'wide()',
   },
 })
 export class Shell {
@@ -23,6 +24,9 @@ export class Shell {
     const path = this.path().split(/[?#]/)[0];
     return path === '/' || path === '';
   });
+  readonly wide = computed(() =>
+    ['/', '/a-propos', '/services', '/fonctionnalites', '/contact'].includes(this.path().split(/[?#]/)[0]),
+  );
   readonly onAuth = computed(() => {
     const path = this.path().split(/[?#]/)[0];
     return path === '/connexion' || path === '/inscription';

@@ -1,0 +1,85 @@
+<section class="page-hero photo-hero photo-about">
+  <div class="frame">
+    <p class="eyebrow">À propos</p>
+    <h1>Le marché des métiers, au Sénégal</h1>
+    <p>
+      Jefamora rapproche un client qui a un besoin et un professionnel qui a le métier.
+      Le paiement reste entre eux. La plateforme organise la recherche, le devis et la mission.
+    </p>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="frame sheet-grid">
+    <figure class="photo-frame">
+      <img src="/features-craft.jpg" alt="Menuisier devant un meuble qu’il vient de poser" />
+    </figure>
+    <article>
+      <h2>Pourquoi Jefamora</h2>
+      <p>
+        Trouver un électricien, un plombier ou un menuisier se fait encore souvent par le bouche-à-oreille.
+        Jefamora donne un catalogue commun, des zones précises et un parcours unique : une demande,
+        des devis, une mission, un avis.
+      </p>
+      <p>
+        Le badge « Profil vérifié Jefamora » est une validation interne du dossier. Ce n’est pas une
+        certification officielle de l’État. Un profil n’apparaît dans l’annuaire que s’il est approuvé,
+        actif et visible.
+      </p>
+    </article>
+    <article class="note-card">
+      <h2>Ce que la plateforme ne fait pas</h2>
+      <ul>
+        <li>Elle n’encaisse pas le chantier et ne prend pas de commission.</li>
+        <li>Elle ne crée pas de compte administrateur depuis l’inscription publique.</li>
+        <li>Elle n’ouvre pas de discussion en dehors de la mission retenue.</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<section class="sheet sheet-alt">
+  <div class="frame">
+    <p class="eyebrow">Pour qui</p>
+    <h2>Deux places, un même marché</h2>
+    <div class="split-cards">
+      <article>
+        <h3>Le client</h3>
+        <p>Il décrit le métier, la zone et l’urgence. Il compare les devis, n’en retient qu’un, suit les travaux et laisse un avis une fois la fin confirmée.</p>
+        <a routerLink="/inscription">Créer un compte client</a>
+      </article>
+      <article>
+        <h3>Le professionnel</h3>
+        <p>Il présente ses métiers, ses zones, ses disponibilités et ses réalisations. Il répond aux demandes qui le visent. Le badge se demande depuis son espace.</p>
+        <a routerLink="/inscription">Devenir professionnel</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="frame">
+    <p class="eyebrow">Territoire</p>
+    <h2>Les zones du référentiel</h2>
+    <p class="sheet-lead">Les professionnels, les demandes et les réalisations utilisent les mêmes zones. Une zone inactive ne peut pas être choisie.</p>
+    @if (zones().length) {
+      <div class="zone-list">
+        @for (region of regions(); track region) {
+          <article>
+            <h3>{{ region }}</h3>
+            <ul>
+              @for (zone of zones(); track zone.id) {
+                @if (zone.region === region) {
+                  <li>{{ zone.city }} · {{ zone.district }}</li>
+                }
+              }
+            </ul>
+          </article>
+        }
+      </div>
+    } @else {
+      <p>Les zones s’affichent dès que le catalogue répond.</p>
+    }
+    <a class="btn" routerLink="/services">Voir les métiers</a>
+  </div>
+</section>

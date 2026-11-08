@@ -1,34 +1,46 @@
-<section class="auth-card">
-  <a class="auth-brand" routerLink="/">
-    <span class="mark">J</span>
-    <span class="word"><span>Jefa</span><span>mora</span></span>
-  </a>
-  <div class="auth-tabs">
-    <a routerLink="/connexion" queryParamsHandling="preserve">Connexion</a>
-    <a routerLink="/inscription" routerLinkActive="active" queryParamsHandling="preserve">Inscription</a>
+<section class="auth-stage">
+  <div class="auth-visual">
+    <p>Jefamora</p>
+    <h1>Ouvrez un compte client ou professionnel.</h1>
+    <span>Un e-mail à confirmer, puis l’annuaire, les devis et les missions.</span>
   </div>
-  <form [formGroup]="form" (submit)="submit($event)">
-    @if (error()) { <p class="alert">{{ error() }}</p> }
-    <label>Nom complet
-      <input formControlName="full_name" autocomplete="name" placeholder="Awa Ndiaye" />
-    </label>
-    <label>Je suis
-      <select formControlName="role">
-        <option value="client">Client</option>
-        <option value="professional">Professionnel</option>
-      </select>
-    </label>
-    <label>Email
-      <input type="email" formControlName="email" autocomplete="email" placeholder="vous@exemple.com" />
-    </label>
-    <label>Mot de passe
-      <input type="password" formControlName="password" autocomplete="new-password" placeholder="••••••••" />
-    </label>
-    <label class="check">
-      <input type="checkbox" formControlName="accept_terms" />
-      J’accepte les conditions Jefamora
-    </label>
-    <button class="btn auth-submit" type="submit">S'inscrire</button>
-  </form>
-  <a class="auth-back" routerLink="/">Retour à l'accueil</a>
+  <div class="auth-panel">
+    <section class="auth-card">
+      <a class="auth-brand" routerLink="/">
+        <span class="mark">J</span>
+        <span class="word"><span>Jefa</span><span>mora</span></span>
+      </a>
+      <div class="auth-tabs">
+        <a routerLink="/connexion" queryParamsHandling="preserve">Connexion</a>
+        <a routerLink="/inscription" routerLinkActive="active" queryParamsHandling="preserve">Inscription</a>
+      </div>
+      <form [formGroup]="form" (submit)="submit($event)">
+        @if (error()) { <p class="alert">{{ error() }}</p> }
+        <label>Nom complet
+          <input formControlName="full_name" autocomplete="name" placeholder="Awa Ndiaye" />
+        </label>
+        <label>Je suis
+          <select formControlName="role">
+            <option value="client">Client</option>
+            <option value="professional">Professionnel</option>
+          </select>
+        </label>
+        <label>Email
+          <input type="email" formControlName="email" autocomplete="email" placeholder="vous@exemple.com" />
+        </label>
+        <label>Mot de passe
+          <span class="secret">
+            <input [type]="showPassword() ? 'text' : 'password'" formControlName="password" autocomplete="new-password" placeholder="8 caractères minimum" />
+            <button type="button" (click)="showPassword.set(!showPassword())">{{ showPassword() ? 'Masquer' : 'Afficher' }}</button>
+          </span>
+        </label>
+        <label class="check">
+          <input type="checkbox" formControlName="accept_terms" />
+          J’accepte les conditions Jefamora
+        </label>
+        <button class="btn auth-submit" type="submit">S'inscrire</button>
+      </form>
+      <a class="auth-back" routerLink="/">Retour à l'accueil</a>
+    </section>
+  </div>
 </section>

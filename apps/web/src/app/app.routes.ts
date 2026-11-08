@@ -5,13 +5,22 @@ import { AccountPage } from './pages/account';
 import { LoginPage, RegisterPage, ResetPage, VerifyPage } from './pages/auth';
 import { BookingDetailPage, BookingsPage } from './pages/bookings';
 import { DashboardPage } from './pages/dashboard';
+import { AboutPage } from './pages/about';
+
+import { ContactPage } from './pages/contact';
+import { FeaturesPage } from './pages/features';
 import { HomePage } from './pages/home';
+import { ServicesPage } from './pages/services';
 import { ProSpacePage } from './pages/pro-space';
 import { ProfessionalDetailPage, ProfessionalsPage } from './pages/professionals';
 import { RequestDetailPage, RequestFormPage, RequestsPage } from './pages/requests';
 
 export const routes: Routes = [
   { path: '', component: HomePage },
+  { path: 'a-propos', component: AboutPage },
+  { path: 'services', component: ServicesPage },
+  { path: 'fonctionnalites', component: FeaturesPage },
+  { path: 'contact', component: ContactPage },
   { path: 'connexion', component: LoginPage, canActivate: [guestGuard] },
   { path: 'inscription', component: RegisterPage, canActivate: [guestGuard] },
   { path: 'verification', component: VerifyPage },

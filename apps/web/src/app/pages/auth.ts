@@ -16,6 +16,7 @@ export class LoginPage {
   private readonly route = inject(ActivatedRoute);
   private readonly formBuilder = inject(FormBuilder);
   readonly error = signal('');
+  readonly showPassword = signal(false);
   readonly form = this.formBuilder.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
@@ -50,6 +51,7 @@ export class RegisterPage {
   private readonly router = inject(Router);
   private readonly formBuilder = inject(FormBuilder);
   readonly error = signal('');
+  readonly showPassword = signal(false);
   readonly form = this.formBuilder.nonNullable.group({
     role: ['client' as 'client' | 'professional', Validators.required],
     full_name: ['', Validators.required],

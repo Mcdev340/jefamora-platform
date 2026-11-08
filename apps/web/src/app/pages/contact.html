@@ -1,0 +1,50 @@
+<section class="page-hero photo-hero photo-contact">
+  <div class="frame">
+    <p class="eyebrow">Contact</p>
+    <h1>Écrire à Jefamora</h1>
+    <p>Le message ouvre un ticket de support rattaché à votre compte. Il ne sert pas à discuter d’une mission : pour cela, les messages sont dans la mission.</p>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="frame contact-layout">
+    <div class="contact-points">
+      <article>
+        <h2>Depuis un compte</h2>
+        <p>Connectez-vous avec un e-mail déjà confirmé. Le texte est conservé si vous devez d’abord vous connecter.</p>
+      </article>
+      <article>
+        <h2>Suivi</h2>
+        <p>Le ticket reste visible dans <a routerLink="/compte/support">Compte → Support</a>, avec sa priorité : basse, normale ou haute.</p>
+      </article>
+      <article>
+        <h2>Confidentialité</h2>
+        <p>Les consentements et la demande de suppression se gèrent dans <a routerLink="/compte/confidentialite">Compte → Confidentialité</a>.</p>
+      </article>
+    </div>
+    <form class="contact-form" [formGroup]="form" (submit)="submit($event)">
+      <img class="contact-photo" src="/auth-welcome.jpg" alt="Cliente et professionnel devant une maison" />
+      @if (error()) { <p class="alert">{{ error() }}</p> }
+      @if (sent()) { <p class="ok">{{ sent() }}</p> }
+      <div class="topic-row">
+        @for (topic of topics; track topic) {
+          <button type="button" [class.on]="form.controls.subject.value === topic" (click)="pick(topic)">{{ topic }}</button>
+        }
+      </div>
+      <label>Sujet
+        <input formControlName="subject" maxlength="180" placeholder="Question sur un dossier ou le compte" />
+      </label>
+      <label>Message
+        <textarea formControlName="description" placeholder="Décrivez la demande."></textarea>
+      </label>
+      <label>Priorité
+        <select formControlName="priority">
+          <option value="low">Basse</option>
+          <option value="normal">Normale</option>
+          <option value="high">Haute</option>
+        </select>
+      </label>
+      <button class="btn" type="submit">{{ auth.isLoggedIn() ? 'Envoyer' : 'Se connecter pour envoyer' }}</button>
+    </form>
+  </div>
+</section>
