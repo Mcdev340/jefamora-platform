@@ -95,3 +95,22 @@ class DisputeEvidence(models.Model):
 
     def __str__(self):
         return self.original_name or self.file_key
+
+
+class SupportMessage(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    ticket = models.ForeignKey(
+        SupportTicket,
+        on_delete=models.CASCADE,
+        related_name="messages",
+    )
+    author = models.ForeignKey("identity.User", on_delete=models.PROTECT)
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "message de support"
+        ordering = ["created_at"]
+
+    def __str__(self):
+        return self.body[:40]

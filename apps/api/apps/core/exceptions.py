@@ -25,7 +25,7 @@ def api_exception_handler(exc, context):
             status=exc.status_code,
         )
 
-    from apps.quotes.services.accept_quote import QuoteDecisionError
+    from apps.quotes.services import QuoteDecisionError
 
     if isinstance(exc, QuoteDecisionError):
         return Response(_payload("invalid_transition", str(exc)), status=400)

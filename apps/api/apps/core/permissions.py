@@ -1,6 +1,6 @@
 from rest_framework.permissions import BasePermission
 
-from apps.identity.models import User
+from apps.users.models import User
 
 
 class IsEmailVerified(BasePermission):

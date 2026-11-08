@@ -27,17 +27,18 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "django_filters",
     "apps.core",
-    "apps.identity",
+    "apps.users",
     "apps.catalog",
     "apps.locations",
     "apps.clients",
+    "apps.favorites",
     "apps.professionals",
     "apps.verification",
     "apps.portfolio",
     "apps.service_requests",
     "apps.quotes",
     "apps.bookings",
-    "apps.conversations",
+    "apps.messaging",
     "apps.reviews",
     "apps.moderation",
     "apps.support",
@@ -45,8 +46,7 @@ INSTALLED_APPS = [
     "apps.audit",
     "apps.analytics",
     "apps.privacy",
-    "apps.search",
-    "apps.backoffice",
+    "apps.administration",
     "apps.payments",
     "apps.subscriptions",
     "apps.ai_assistant",
@@ -92,6 +92,9 @@ DATABASES = {
         "PORT": env.int("POSTGRES_PORT", default=5432),
         "CONN_MAX_AGE": env.int("POSTGRES_CONN_MAX_AGE", default=60),
         "CONN_HEALTH_CHECKS": True,
+        "TEST": {
+            "NAME": env("POSTGRES_TEST_DB", default="jefamora_test"),
+        },
     }
 }
 
@@ -134,7 +137,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 6 * 1024 * 1024
 FILE_UPLOAD_MAX_MEMORY_SIZE = 6 * 1024 * 1024
 
 REST_FRAMEWORK = {
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_SCHEMA_CLASS": "apps.core.schema.AppTagAutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
@@ -172,9 +175,35 @@ SIMPLE_JWT = {
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Jefamora API",
-    "DESCRIPTION": "API de la plateforme Jefamora.",
+    "DESCRIPTION": "API de la plateforme Jefamora. Chaque groupe porte le nom de l'app, puis ses routes.",
     "VERSION": "v1",
     "SERVE_INCLUDE_SCHEMA": False,
+    "TAGS": [
+        {"name": "core", "description": "Santé de l'API."},
+        {"name": "users", "description": "Compte, connexion et profil."},
+        {"name": "locations", "description": "Zones et adresses."},
+        {"name": "favorites", "description": "Professionnels mis de côté."},
+        {"name": "clients", "description": "Profil client."},
+        {"name": "catalog", "description": "Catégories, métiers et spécialités."},
+        {"name": "professionals", "description": "Profil, services, zones et recherche."},
+        {"name": "portfolio", "description": "Réalisations."},
+        {"name": "service_requests", "description": "Demandes de service."},
+        {"name": "quotes", "description": "Devis."},
+        {"name": "bookings", "description": "Missions."},
+        {"name": "messaging", "description": "Messages de la mission."},
+        {"name": "reviews", "description": "Avis."},
+        {"name": "moderation", "description": "Signalements et blocages."},
+        {"name": "notifications", "description": "Notifications."},
+        {"name": "verification", "description": "Badge Profil vérifié."},
+        {"name": "support", "description": "Tickets et preuves de litige."},
+        {"name": "privacy", "description": "Données personnelles."},
+        {"name": "payments", "description": "Paiement, inactif en V1."},
+        {"name": "subscriptions", "description": "Abonnements, inactifs en V1."},
+        {"name": "ai_assistant", "description": "Assistant, inactif en V1."},
+        {"name": "audit", "description": "Journal des actions sensibles."},
+        {"name": "analytics", "description": "Statistiques et exports."},
+        {"name": "administration", "description": "Back-office super-admin."},
+    ],
 }
 
 LOGGING = {

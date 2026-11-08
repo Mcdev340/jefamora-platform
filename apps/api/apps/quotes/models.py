@@ -95,3 +95,6 @@ class QuoteLine(UUIDModel):
 
     def __str__(self):
         return self.label
+
+
+QuoteItem = QuoteLine

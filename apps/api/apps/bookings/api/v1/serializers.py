@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.bookings.models import Booking
-from apps.conversations.models import Message
+from apps.messaging.models import Message
 from apps.reviews.models import Review
 
 

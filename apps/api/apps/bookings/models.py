@@ -74,3 +74,32 @@ class Booking(UUIDModel):
         super().clean()
         if self.quote_id and self.quote.status != Quote.Status.ACCEPTED:
             raise ValidationError("Seul un devis accepté devient une réservation.")
+
+
+class BookingStatusHistory(UUIDModel):
+    """Trace chaque changement de statut d'une mission."""
+
+    booking = models.ForeignKey(
+        Booking,
+        verbose_name="réservation",
+        on_delete=models.CASCADE,
+        related_name="status_history",
+    )
+    previous_status = models.CharField("statut précédent", max_length=40, blank=True)
+    status = models.CharField("statut", max_length=40)
+    changed_by = models.ForeignKey(
+        "identity.User",
+        verbose_name="modifié par",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="booking_status_changes",
+    )
+
+    class Meta:
+        verbose_name = "historique de statut"
+        verbose_name_plural = "historiques de statut"
+        ordering = ["created_at"]
+
+    def __str__(self):
+        return f"{self.previous_status} → {self.status}"

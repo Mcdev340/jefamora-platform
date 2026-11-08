@@ -11,7 +11,7 @@ def validate_specialty_belongs_to_trade(trade, specialty):
 
 
 def validate_professional_user(user):
-    from apps.identity.models import User
+    from apps.users.models import User
 
     if user is None:
         return

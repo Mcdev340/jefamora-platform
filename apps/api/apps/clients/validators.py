@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 
-from apps.identity.models import User
+from apps.users.models import User
 
 
 def validate_client_user(user):

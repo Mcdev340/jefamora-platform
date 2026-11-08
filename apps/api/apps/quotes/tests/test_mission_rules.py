@@ -8,13 +8,13 @@ from django.utils import timezone
 from apps.bookings.models import Booking
 from apps.catalog.models import Category, Specialty, Trade
 from apps.clients.models import ClientProfile
-from apps.conversations.models import Conversation, Message
-from apps.identity.models import User
+from apps.messaging.models import Conversation, Message
+from apps.users.models import User
 from apps.locations.models import Zone
 from apps.portfolio.models import PortfolioItem
 from apps.professionals.models import Availability, ProfessionalProfile, ProfessionalService
 from apps.quotes.models import Quote
-from apps.quotes.services.accept_quote import QuoteDecisionError, accept_quote
+from apps.quotes.services import QuoteDecisionError, accept_quote
 from apps.reviews.models import Review
 from apps.service_requests.models import RequestRecipient, ServiceRequest
 

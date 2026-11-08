@@ -26,3 +26,19 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class NotificationPreference(models.Model):
+    user = models.OneToOneField(
+        "identity.User",
+        on_delete=models.CASCADE,
+        related_name="notification_preference",
+    )
+    email_enabled = models.BooleanField(default=True)
+    push_enabled = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "préférence de notification"
+
+    def __str__(self):
+        return str(self.user_id)
