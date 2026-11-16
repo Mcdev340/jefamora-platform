@@ -13,6 +13,7 @@ const STORAGE_KEY = 'jefamora.session';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
+  private persistLocally = true;
   private readonly session = signal<Session | null>(this.read());
 
   readonly profile = computed(() => this.session()?.profile ?? null);
@@ -38,10 +39,10 @@ export class AuthService {
       .pipe(tap((value) => this.store(value)));
   }
 
-  login(email: string, password: string): Observable<Session> {
+  login(email: string, password: string, remember = true): Observable<Session> {
     return this.http
       .post<Session>('/api/v1/users/login/', { email, password })
-      .pipe(tap((value) => this.store(value)));
+      .pipe(tap((value) => this.store(value, remember)));
   }
 
   refreshAccess(): Observable<Tokens> {
@@ -98,15 +99,23 @@ export class AuthService {
   clear(): void {
     this.session.set(null);
     localStorage.removeItem(STORAGE_KEY);
+    sessionStorage.removeItem(STORAGE_KEY);
   }
 
-  private store(value: Session): void {
+  private store(value: Session, remember = this.persistLocally): void {
+    this.persistLocally = remember;
     this.session.set(value);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+    const keep = remember ? localStorage : sessionStorage;
+    const drop = remember ? sessionStorage : localStorage;
+    drop.removeItem(STORAGE_KEY);
+    keep.setItem(STORAGE_KEY, JSON.stringify(value));
   }
 
   private read(): Session | null {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const local = localStorage.getItem(STORAGE_KEY);
+    const temporary = sessionStorage.getItem(STORAGE_KEY);
+    this.persistLocally = Boolean(local) || !temporary;
+    const raw = local ?? temporary;
     if (!raw) {
       return null;
     }

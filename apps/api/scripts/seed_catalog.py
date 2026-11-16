@@ -41,6 +41,12 @@ ZONES = [
     ("Dakar", "Dakar", "Ouakam"),
     ("Dakar", "Pikine", "Pikine"),
     ("Dakar", "Guédiawaye", "Guédiawaye"),
+    ("Dakar", "Rufisque", "Rufisque"),
+    ("Dakar", "Keur Massar", "Keur Massar"),
+    ("Dakar", "Bargny", "Bargny"),
+    ("Dakar", "Diamniadio", "Diamniadio"),
+    ("Dakar", "Sébikotane", "Sébikotane"),
+    ("Dakar", "Sangalkam", "Sangalkam"),
     ("Thiès", "Thiès", "Thiès Nord"),
     ("Saint-Louis", "Saint-Louis", "Centre"),
 ]

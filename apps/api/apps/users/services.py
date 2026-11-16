@@ -19,7 +19,9 @@ from apps.core.request import client_ip
 from apps.users.models import DeviceSession, OneTimeCode, User
 from apps.users.tokens import JefamoraRefreshToken
 from apps.privacy.models import UserConsent
-from apps.professionals.models import ProfessionalProfile
+from apps.catalog.models import Trade
+from apps.locations.models import Zone
+from apps.professionals.models import ProfessionalProfile, ProfessionalService
 
 
 def _send_code_mail(user, purpose, code):
@@ -160,7 +162,32 @@ def register_account(*, data, request):
     if role == User.Role.CLIENT:
         ClientProfile.objects.create(user=user, company_name=data.get("company_name", ""))
     else:
-        ProfessionalProfile.objects.create(user=user, business_name=business_name)
+        profile = ProfessionalProfile.objects.create(user=user, business_name=business_name)
+        trade_id = data.get("trade_id")
+        trade_name = (data.get("trade") or "").strip()
+        if trade_id or trade_name:
+            trade = None
+            if trade_id:
+                trade = Trade.objects.filter(id=trade_id, is_active=True).first()
+            if trade is None and trade_name:
+                trade = Trade.objects.filter(name__iexact=trade_name, is_active=True).first()
+            if trade is None:
+                raise APIError(
+                    "validation_error",
+                    "Choisissez un métier du catalogue.",
+                    fields={"trade": ["Métier inconnu ou inactif."]},
+                )
+            ProfessionalService.objects.create(profile=profile, trade=trade, title=trade.name)
+        city = (data.get("city") or "").strip()
+        if city:
+            zones = list(Zone.objects.filter(region__iexact="Dakar", city__iexact=city, is_active=True))
+            if not zones:
+                raise APIError(
+                    "validation_error",
+                    "Choisissez une ville du référentiel.",
+                    fields={"city": ["Ville inconnue ou inactive."]},
+                )
+            profile.assign_zones(zones)
     UserConsent.objects.create(user=user, code="terms", version="v1", granted=True)
     issue_code(user, OneTimeCode.Purpose.EMAIL_VERIFICATION)
     audit(actor=user, action="account.registered", target=user, request=request)

@@ -12,6 +12,9 @@ class RegisterSerializer(serializers.Serializer):
     role = serializers.ChoiceField(choices=[User.Role.CLIENT, User.Role.PROFESSIONAL])
     business_name = serializers.CharField(required=False, allow_blank=True)
     company_name = serializers.CharField(required=False, allow_blank=True)
+    trade_id = serializers.UUIDField(required=False, allow_null=True)
+    trade = serializers.CharField(required=False, allow_blank=True)
+    city = serializers.CharField(required=False, allow_blank=True)
     accept_terms = serializers.BooleanField()
 
 
