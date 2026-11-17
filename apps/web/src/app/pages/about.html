@@ -1,5 +1,5 @@
-<section class="story-hero">
-  <div class="frame story-hero-grid">
+<section class="vivid-hero">
+  <div class="frame vivid-hero-grid">
     <div>
       <p class="eyebrow">À propos</p>
       <h1>Le marché des métiers, au Sénégal</h1>
@@ -7,22 +7,27 @@
         Jefamora rapproche un client qui a un besoin et un professionnel qui a le métier.
         Le paiement reste entre eux. La plateforme organise la recherche, le devis et la mission.
       </p>
+      <div class="vivid-actions">
+        <a class="btn" routerLink="/inscription">Créer un compte</a>
+        <a class="btn btn-ghost" routerLink="/services">Voir les métiers</a>
+      </div>
     </div>
-    <figure>
-      <img src="/about-meet.jpg" alt="Client et maçon sur un chantier au Sénégal" />
+    <figure class="vivid-art">
+      <img src="/about-energy.jpg" alt="Illustration d’une cliente et d’un artisan qui se serrent la main devant une maison" />
     </figure>
   </div>
 </section>
 
 <section class="sheet">
-  <div class="frame sheet-grid">
-    <figure class="photo-frame">
-      <img src="/features-craft.jpg" alt="Menuisier devant un meuble qu’il vient de poser" />
+  <div class="frame vivid-split">
+    <figure>
+      <img src="/about-meet.jpg" alt="Client et maçon sur un chantier au Sénégal" />
     </figure>
     <article>
-      <h2>Pourquoi Jefamora</h2>
+      <p class="eyebrow">Pourquoi</p>
+      <h2>Trouver un métier sans seulement le bouche-à-oreille</h2>
       <p>
-        Trouver un électricien, un plombier ou un menuisier se fait encore souvent par le bouche-à-oreille.
+        Trouver un électricien, un plombier ou un menuisier se fait encore souvent par recommandation.
         Jefamora donne un catalogue commun, des zones précises et un parcours unique : une demande,
         des devis, une mission, un avis.
       </p>
@@ -32,28 +37,32 @@
         actif et visible.
       </p>
     </article>
-    <article class="note-card">
-      <h2>Ce que la plateforme ne fait pas</h2>
-      <ul>
-        <li>Elle n’encaisse pas le chantier et ne prend pas de commission.</li>
-        <li>Elle ne crée pas de compte administrateur depuis l’inscription publique.</li>
-        <li>Elle n’ouvre pas de discussion en dehors de la mission retenue.</li>
-      </ul>
-    </article>
   </div>
 </section>
 
 <section class="sheet sheet-alt">
   <div class="frame">
+    <p class="eyebrow">Limites</p>
+    <h2>Ce que la plateforme ne fait pas</h2>
+    <ul class="vivid-limits">
+      <li>Elle n’encaisse pas le chantier et ne prend pas de commission.</li>
+      <li>Elle ne crée pas de compte administrateur depuis l’inscription publique.</li>
+      <li>Elle n’ouvre pas de discussion en dehors de la mission retenue.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="frame">
     <p class="eyebrow">Pour qui</p>
     <h2>Deux places, un même marché</h2>
-    <div class="split-cards">
+    <div class="vivid-duo">
       <article>
         <h3>Le client</h3>
         <p>Il décrit le métier, la zone et l’urgence. Il compare les devis, n’en retient qu’un, suit les travaux et laisse un avis une fois la fin confirmée.</p>
         <a routerLink="/inscription">Créer un compte client</a>
       </article>
-      <article>
+      <article class="ink">
         <h3>Le professionnel</h3>
         <p>Il présente ses métiers, ses zones, ses disponibilités et ses réalisations. Il répond aux demandes qui le visent. Le badge se demande depuis son espace.</p>
         <a routerLink="/inscription">Devenir professionnel</a>
@@ -62,7 +71,7 @@
   </div>
 </section>
 
-<section class="sheet">
+<section class="sheet sheet-alt">
   <div class="frame">
     <p class="eyebrow">Territoire</p>
     <h2>Les zones du référentiel</h2>
@@ -85,6 +94,5 @@
     } @else {
       <p>Les zones s’affichent dès que le catalogue répond.</p>
     }
-    <a class="btn" routerLink="/services">Voir les métiers</a>
   </div>
 </section>

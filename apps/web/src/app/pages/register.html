@@ -1,41 +1,48 @@
 <section class="auth-stage">
   <aside class="auth-aside">
     <a class="auth-lockup" routerLink="/">
-      <span class="mark">J</span>
-      Jefamora
+      <img src="logo.png" alt="Jefamora" />
     </a>
     <div class="auth-pitch">
-      <h1>Trouvez le bon professionnel, rapidement.</h1>
+      <p class="auth-eyebrow">Sénégal · artisans de confiance</p>
+      <h1>Le bon professionnel, près de chez vous.</h1>
       @if (form.controls.role.value === 'professional') {
-        <p>Électriciens, plombiers, menuisiers, maçons : des artisans qualifiés près de chez vous, partout au Sénégal.</p>
+        <p>Électriciens, plombiers, menuisiers, maçons : présentez votre métier et recevez des demandes près de chez vous.</p>
       } @else {
-        <p>Décrivez votre besoin, contactez directement des artisans qualifiés près de chez vous.</p>
+        <p>Décrivez votre besoin et contactez directement des artisans qualifiés, sans intermédiaire.</p>
       }
-      <ul>
+      <ul class="auth-points">
         <li>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v6c0 4.5 3 6.8 7 8 4-1.2 7-3.5 7-8V6z"/></svg>
+          <span class="auth-ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v6c0 4.5 3 6.8 7 8 4-1.2 7-3.5 7-8V6z"/></svg>
+          </span>
           <span><strong>Professionnels vérifiés</strong>Profils contrôlés avant publication.</span>
         </li>
         <li>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14v10H5z"/><path d="m5 7 7 5 7-5"/></svg>
+          <span class="auth-ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14v10H5z"/><path d="m5 7 7 5 7-5"/></svg>
+          </span>
           <span><strong>Contact direct</strong>Échangez par téléphone ou WhatsApp.</span>
         </li>
         <li>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.2"/></svg>
+          <span class="auth-ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.2"/></svg>
+          </span>
           <span><strong>Près de chez vous</strong>Recherche par ville et par métier.</span>
         </li>
       </ul>
     </div>
-    <p class="auth-legal-foot">© Jefamora</p>
+    <p class="auth-quote">Gratuit pour commencer. Aucun frais pour créer un compte.</p>
   </aside>
   <div class="auth-panel">
-    <section class="auth-card">
+    <section class="auth-card auth-card-wide">
+      <p class="auth-kicker">Nouveau compte</p>
       <h2>Créer mon compte</h2>
       <p class="auth-lead">
         @if (form.controls.role.value === 'professional') {
-          Gratuit, en moins d’une minute.
+          En moins d’une minute, visible auprès des clients de votre ville.
         } @else {
-          Gratuit pour les clients, en moins d’une minute.
+          En moins d’une minute, pour contacter des artisans près de chez vous.
         }
       </p>
       <form [formGroup]="form" (submit)="submit($event)">
@@ -44,24 +51,32 @@
           <span>Je suis</span>
           <div class="role-pick">
             <button type="button" [class.on]="form.controls.role.value === 'client'" (click)="choose('client')">
+              <span class="role-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 19c1.2-3 3.4-4.5 7-4.5s5.8 1.5 7 4.5"/></svg>
+              </span>
               <strong>Client</strong>
               <small>Je cherche un professionnel</small>
             </button>
             <button type="button" [class.on]="form.controls.role.value === 'professional'" (click)="choose('professional')">
+              <span class="role-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 10h16v9H4z"/><path d="M8 10V7.5A2.5 2.5 0 0 1 10.5 5h3A2.5 2.5 0 0 1 16 7.5V10"/><path d="M12 13v3"/></svg>
+              </span>
               <strong>Professionnel</strong>
               <small>Je propose mes services</small>
             </button>
           </div>
         </div>
-        <label>Nom complet
-          <input formControlName="full_name" autocomplete="name" placeholder="Awa Ndiaye" />
-        </label>
-        <label>Téléphone
-          <span class="phone-row">
-            <span class="prefix">+221</span>
-            <input formControlName="phone" inputmode="numeric" autocomplete="tel-national" placeholder="77 123 45 67" />
-          </span>
-        </label>
+        <div class="pair">
+          <label>Nom complet
+            <input formControlName="full_name" autocomplete="name" placeholder="Awa Ndiaye" />
+          </label>
+          <label>Téléphone
+            <span class="phone-row">
+              <span class="prefix">+221</span>
+              <input formControlName="phone" inputmode="numeric" autocomplete="tel-national" placeholder="77 123 45 67" />
+            </span>
+          </label>
+        </div>
         @if (form.controls.role.value === 'professional') {
           <div class="pair">
             <label>Métier
@@ -82,9 +97,9 @@
             </label>
           </div>
         } @else {
-          <label>Ville (pour trouver des pros près de vous)
+          <label>Ville
             <select formControlName="city">
-              <option value="">Choisir</option>
+              <option value="">Choisir une ville</option>
               @for (city of cities; track city) {
                 <option [value]="city">{{ city }}</option>
               }
@@ -96,14 +111,20 @@
         </label>
         <label>Mot de passe
           <span class="secret">
-            <input [type]="showPassword() ? 'text' : 'password'" formControlName="password" autocomplete="new-password" placeholder="••••••••" />
-            <button type="button" (click)="showPassword.set(!showPassword())">{{ showPassword() ? 'Masquer' : 'Afficher' }}</button>
+            <input [type]="showPassword() ? 'text' : 'password'" formControlName="password" autocomplete="new-password" placeholder="8 caractères minimum" />
+            <button type="button" class="secret-toggle" [attr.aria-label]="showPassword() ? 'Masquer le mot de passe' : 'Afficher le mot de passe'" (click)="showPassword.set(!showPassword())">
+              @if (showPassword()) {
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 6.2A10.7 10.7 0 0 1 12 6c6.5 0 10 6 10 6a18 18 0 0 1-3.2 3.8"/><path d="M6.1 6.8C3.8 8.4 2 12 2 12s3.5 6 10 6c1.3 0 2.5-.3 3.6-.8"/><path d="M9.9 9.9a2.6 2.6 0 0 0 3.7 3.7"/></svg>
+              } @else {
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.6"/></svg>
+              }
+            </button>
           </span>
           @if (strength().note) {
             <span class="strength" [attr.data-score]="strength().score">
               <i></i><i></i><i></i><i></i>
             </span>
-            <small class="strength-note">{{ strength().note }}</small>
+            <small class="strength-note" [class.warn]="strength().score < 3">{{ strength().note }}</small>
           }
         </label>
         <label class="check">

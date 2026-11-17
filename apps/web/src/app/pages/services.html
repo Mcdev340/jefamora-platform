@@ -1,18 +1,22 @@
-<section class="story-hero">
-  <div class="frame story-hero-grid">
+<section class="vivid-hero">
+  <div class="frame vivid-hero-grid">
     <div>
       <p class="eyebrow">Services</p>
       <h1>De la recherche jusqu’à l’avis</h1>
-      <p>Quatre services, dans l’ordre d’une mission. Le catalogue en dessous est celui qui est réellement en ligne.</p>
+      <p>Quatre temps, dans l’ordre d’une mission. Le catalogue en dessous est celui qui est réellement en ligne.</p>
+      <div class="vivid-actions">
+        <a class="btn" routerLink="/professionnels">Ouvrir l’annuaire</a>
+        <a class="btn btn-ghost" routerLink="/demandes/nouvelle">Préparer une demande</a>
+      </div>
     </div>
-    <figure>
-      <img src="/services-work.jpg" alt="Électricien, plombier et menuisier au travail" />
+    <figure class="vivid-art">
+      <img src="/services-flow.jpg" alt="Illustration du parcours : recherche, devis, chantier et avis" />
     </figure>
   </div>
 </section>
 
 <section class="sheet">
-  <div class="frame service-list">
+  <div class="frame service-rail">
     <article>
       <span>01</span>
       <div>
@@ -25,7 +29,7 @@
       <span>02</span>
       <div>
         <h2>Demandes et devis</h2>
-        <p>Le client envoie une demande. Plusieurs professionnels peuvent répondre. Chaque devis peut détailler des lignes en FCFA. Un seul devis accepté devient la mission : il n’y a pas un second chemin entre la demande et la réservation.</p>
+        <p>Le client envoie une demande. Plusieurs professionnels peuvent répondre. Chaque devis peut détailler des lignes en FCFA. Un seul devis accepté devient la mission.</p>
         <a routerLink="/demandes/nouvelle">Préparer une demande</a>
       </div>
     </article>
@@ -48,7 +52,18 @@
   </div>
 </section>
 
-<section class="sheet sheet-alt">
+<section class="vivid-band">
+  <div class="frame vivid-band-grid">
+    <img src="/services-work.jpg" alt="Électricien, plombier et menuisier au travail" />
+    <div>
+      <p class="eyebrow">Sur le terrain</p>
+      <h2>Le métier reste entre le client et l’artisan</h2>
+      <p>Jefamora organise la rencontre. Le paiement du chantier ne passe pas par la plateforme, et aucune commission n’est prise.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
   <div class="frame">
     <p class="eyebrow">Catalogue</p>
     <h2>Les métiers disponibles</h2>
@@ -64,13 +79,13 @@
   </div>
 </section>
 
-<section class="sheet">
-  <div class="frame split-cards">
+<section class="sheet sheet-alt">
+  <div class="frame vivid-duo">
     <article>
       <h2>Côté client</h2>
       <p>Choisissez le métier, la zone et l’urgence. Ajoutez une adresse. Comparez les devis. Confirmez la fin des travaux avant l’avis. Vous pouvez modifier la note pendant 48 heures.</p>
     </article>
-    <article>
+    <article class="ink">
       <h2>Côté professionnel</h2>
       <p>Renseignez la fiche, les services, les zones et les disponibilités. Publiez des réalisations rattachées à un métier. Répondez, refusez, ou demandez la fin de la mission.</p>
     </article>
