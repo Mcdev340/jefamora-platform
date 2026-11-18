@@ -1,158 +1,170 @@
-<section class="home-hero">
-  <div class="frame home-hero-grid">
-    <div>
-      <p class="eyebrow">Sénégal · artisans de confiance</p>
-      <h1>Le bon professionnel, près de chez vous.</h1>
-      <p>Décrivez le métier et la zone. Comparez les devis. Une seule mission. Le paiement reste entre vous et l’artisan.</p>
-      <div class="home-actions">
-        <a class="btn" routerLink="/professionnels">Rechercher un professionnel</a>
-        <a class="btn btn-ghost" routerLink="/inscription">Créer un compte</a>
-      </div>
-      <ul class="home-points">
-        <li>Profils contrôlés avant d’être visibles</li>
-        <li>Une demande, des devis, un seul choix</li>
-        <li>0 FCFA de commission</li>
-      </ul>
+<section class="hero">
+  <div class="frame hero-inner">
+    <p class="eyebrow">Région de Dakar · Sénégal</p>
+    <h1>Trouvez rapidement le bon <span>professionnel</span> près de chez vous</h1>
+    <p class="hero-lead">Décrivez votre besoin, comparez les devis, retenez un seul professionnel. Le paiement reste entre vous et l’artisan.</p>
+    <form class="hero-search" (submit)="search($event)">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input
+        name="q"
+        list="home-trades"
+        [value]="query()"
+        (input)="query.set($any($event.target).value)"
+        placeholder="Quel métier recherchez-vous ?"
+        aria-label="Métier recherché"
+      />
+      <datalist id="home-trades">
+        @for (item of trades(); track item.id) {
+          <option [value]="label(item.name)"></option>
+        }
+      </datalist>
+      <button class="btn" type="submit">Rechercher</button>
+    </form>
+    <div class="hero-chips">
+      <span>Populaires :</span>
+      @for (name of popular; track name) {
+        <button type="button" (click)="open(name)">{{ label(name) }}</button>
+      }
     </div>
-    <div class="home-stage">
-      <img class="home-art" src="/about-energy.jpg" alt="Illustration d’une cliente et d’un artisan qui se serrent la main" />
-      <img class="home-photo" src="/hero.jpg" alt="Ouvrier au travail sur un chantier" />
+    <div class="hero-actions hero-links">
+      <a class="btn" routerLink="/services">Voir les services <span aria-hidden="true">→</span></a>
+      <a class="btn btn-glass" routerLink="/fonctionnalites">Fonctionnalités <span aria-hidden="true">→</span></a>
     </div>
   </div>
 </section>
 
-<section class="home-flow">
+<section class="section">
   <div class="frame">
-    <div class="home-flow-head">
-      <div>
-        <p class="eyebrow">Comment ça marche</p>
-        <h2>Trois gestes, une mission</h2>
-        <p>L’annuaire ne montre que les profils approuvés et visibles. Vous n’acceptez qu’un devis.</p>
-      </div>
-      <img src="/services-flow.jpg" alt="Illustration du parcours : recherche, devis, chantier et avis" />
+    <header class="section-title">
+      <p class="eyebrow">Pourquoi Jefamora</p>
+      <h2>Une plateforme simple pour trouver un artisan qualifié</h2>
+      <p>Un catalogue commun, des zones précises et un parcours clair, de la demande jusqu’à l’avis.</p>
+    </header>
+    <div class="feature-grid">
+      <article class="feature-card">
+        <span class="tile"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <h3>Profils vérifiés</h3>
+        <p>Le badge « Profil vérifié Jefamora » est une validation interne du dossier, avant que le profil soit visible.</p>
+      </article>
+      <article class="feature-card">
+        <span class="tile blue"><svg viewBox="0 0 24 24"><path d="M6 4h12v16H6z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span>
+        <h3>Plusieurs devis</h3>
+        <p>Une demande peut viser plusieurs professionnels. Vous comparez, puis vous n’en retenez qu’un.</p>
+      </article>
+      <article class="feature-card">
+        <span class="tile green"><svg viewBox="0 0 24 24"><path d="M4 7h14a2 2 0 0 1 2 2v9H6a2 2 0 0 1-2-2z"/><path d="M4 7V6a2 2 0 0 1 2-2h10v3M16 12.5h4"/></svg></span>
+        <h3>0 FCFA de commission</h3>
+        <p>Le paiement du chantier se fait directement entre le client et le professionnel.</p>
+      </article>
+      <article class="feature-card">
+        <span class="tile violet"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg></span>
+        <h3>Messages de mission</h3>
+        <p>La conversation s’ouvre avec la mission et reste réservée au client et au professionnel concernés.</p>
+      </article>
+      <article class="feature-card">
+        <span class="tile amber"><svg viewBox="0 0 24 24"><path d="m12 3 2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.5 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg></span>
+        <h3>Avis après la fin</h3>
+        <p>Un seul avis par mission, après confirmation de la fin des travaux. Le professionnel peut y répondre.</p>
+      </article>
+      <article class="feature-card">
+        <span class="tile rose"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg></span>
+        <h3>Près de chez vous</h3>
+        <p>Recherche par métier et par zone : Dakar, Pikine, Guédiawaye, Rufisque et le reste de la région.</p>
+      </article>
     </div>
-    <div class="home-steps">
-      <article>
-        <span>01</span>
+  </div>
+</section>
+
+<section class="section section-muted">
+  <div class="frame">
+    <header class="section-title">
+      <p class="eyebrow">Comment ça marche</p>
+      <h2>Quatre étapes pour trouver le bon artisan</h2>
+      <p>Du compte jusqu’à l’avis, chaque étape est suivie dans votre espace.</p>
+    </header>
+    <div class="steps-grid">
+      <article class="step-card">
+        <span class="step-orb"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg><b>1</b></span>
+        <h3>Inscrivez-vous</h3>
+        <p>Créez votre compte gratuitement et confirmez votre e-mail.</p>
+      </article>
+      <article class="step-card">
+        <span class="step-orb"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><b>2</b></span>
         <h3>Décrivez</h3>
-        <p>Le métier, la zone et l’urgence.</p>
+        <p>Le métier, la zone et l’urgence de votre besoin.</p>
       </article>
-      <article>
-        <span>02</span>
+      <article class="step-card">
+        <span class="step-orb"><svg viewBox="0 0 24 24"><path d="M6 4h12v16H6z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><b>3</b></span>
         <h3>Comparez</h3>
-        <p>Plusieurs réponses. Un seul devis retenu, et la mission est créée.</p>
+        <p>Recevez les devis et retenez-en un seul : la mission est créée.</p>
       </article>
-      <article>
-        <span>03</span>
+      <article class="step-card">
+        <span class="step-orb"><svg viewBox="0 0 24 24"><path d="m5 12 4 4 10-10"/></svg><b>4</b></span>
         <h3>Réalisez</h3>
-        <p>Messages, fin des travaux, puis un avis. Le paiement reste entre vous.</p>
+        <p>Suivez les travaux, confirmez la fin, puis laissez un avis.</p>
       </article>
     </div>
   </div>
 </section>
 
-<section class="offer">
-  <div class="frame offer-layout">
-    <div>
-      <p class="eyebrow">Nos services</p>
-      <h2>Quatre portes, dans l’ordre d’une mission</h2>
-      <p>Que vous soyez un particulier ou une entreprise, Jefamora relie votre besoin aux métiers du bâtiment, du confort et de la maison.</p>
-      <a class="btn" routerLink="/services">Découvrir tous nos services</a>
-    </div>
-    <div class="offer-grid">
-      <a class="offer-card" routerLink="/professionnels">
-        <span class="offer-icon blue">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></svg>
-        </span>
-        <strong>Trouver un professionnel</strong>
-        <span>Annuaire par métier et par zone</span>
-      </a>
-      <a class="offer-card" routerLink="/demandes">
-        <span class="offer-icon green">
-          <svg viewBox="0 0 24 24"><path d="M6 4h12v16H6zM9 8h6M9 12h6M9 16h4"/></svg>
-        </span>
-        <strong>Demandes et devis</strong>
-        <span>Plusieurs réponses, un seul choix</span>
-      </a>
-      <a class="offer-card" routerLink="/missions">
-        <span class="offer-icon violet">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="m8.5 12 2.4 2.4 4.6-5"/></svg>
-        </span>
-        <strong>Suivi de mission</strong>
-        <span>Messages, fin des travaux et avis</span>
-      </a>
-      <a class="offer-card" routerLink="/fonctionnalites">
-        <span class="offer-icon orange">
-          <svg viewBox="0 0 24 24"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z"/></svg>
-        </span>
-        <strong>Profil vérifié</strong>
-        <span>Contrôle du dossier avant visibilité</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<section class="mosaic">
+<section class="section">
   <div class="frame">
-    <div class="mosaic-head">
-      <div>
-        <p class="eyebrow">Métiers</p>
-        <h2>Choisissez le geste, pas une liste grise</h2>
-      </div>
-      <a routerLink="/services">Tout le catalogue</a>
-    </div>
-    <div class="mosaic-grid">
-      @for (item of trades(); track item.id; let first = $first) {
-        <a
-          [class.featured]="first"
-          [attr.data-tone]="tone(item.name)"
-          [routerLink]="['/professionnels']"
-          [queryParams]="{ trade: item.id }"
-        >
-          <span>{{ label(item.name).slice(0, 1) }}</span>
-          <strong>{{ label(item.name) }}</strong>
-          <em>{{ item.name }}</em>
+    <header class="section-title">
+      <p class="eyebrow">Métiers</p>
+      <h2>Les métiers du catalogue</h2>
+      <p>Bâtiment, confort et maison. Chaque carte ouvre l’annuaire sur ce métier.</p>
+    </header>
+    <div class="trade-cards">
+      @for (item of trades(); track item.id) {
+        <a class="trade-card" [routerLink]="['/professionnels']" [queryParams]="{ trade: item.id }">
+          <span [class]="'tile ' + tone(item.name)">{{ label(item.name).slice(0, 1) }}</span>
+          <span>
+            <strong>{{ label(item.name) }}</strong>
+            <small>{{ item.name }}</small>
+          </span>
         </a>
       } @empty {
         <p>Les métiers s’affichent dès que le catalogue répond.</p>
       }
     </div>
+    <div class="section-foot">
+      <a class="btn btn-ghost" routerLink="/services">Voir tous les services</a>
+    </div>
   </div>
 </section>
 
-<section class="home-doors">
-  <div class="frame home-paths">
-  <a class="home-path" routerLink="/demandes/nouvelle">
-    <img src="/hero.jpg" alt="" />
-    <div>
-      <p>Client</p>
-      <h2>Un besoin, plusieurs devis, un seul choix</h2>
-      <span>Lancer une demande</span>
-    </div>
-  </a>
-  <a class="home-path" routerLink="/inscription">
-    <img src="/features-motion.jpg" alt="" />
-    <div>
-      <p>Professionnel</p>
-      <h2>Votre fiche, vos zones, votre badge</h2>
-      <span>Ouvrir un compte</span>
-    </div>
-  </a>
+<section class="section section-muted">
+  <div class="frame doors">
+    <a class="door door-client" routerLink="/demandes/nouvelle">
+      <p class="eyebrow">Client</p>
+      <h3>Un besoin, plusieurs devis, un seul choix</h3>
+      <span>Lancer une demande →</span>
+    </a>
+    <a class="door door-pro" routerLink="/inscription">
+      <p class="eyebrow">Professionnel</p>
+      <h3>Votre fiche, vos zones, votre badge</h3>
+      <span>Créer un compte professionnel →</span>
+    </a>
   </div>
 </section>
 
-<section class="home-close">
+<section class="cta-band">
   <div class="frame">
-    <p class="eyebrow">Jefamora</p>
-    <h2>Le bon professionnel est déjà un métier du catalogue</h2>
-    <div class="home-actions">
-      <a class="btn" routerLink="/professionnels">Rechercher un professionnel</a>
-      <a class="btn btn-ghost" routerLink="/contact">Écrire à Jefamora</a>
-    </div>
-    <div class="home-stats">
-      <p><strong>{{ trades().length }}</strong><span>métiers en ligne</span></p>
-      <p><strong>{{ zoneCount() }}</strong><span>zones du référentiel</span></p>
-      <p><strong>0 FCFA</strong><span>de commission</span></p>
+    <div class="cta-card">
+      <div class="cta-copy">
+        <p class="eyebrow">Inscription gratuite</p>
+        <h2>Prêt à trouver votre <span>professionnel</span> ?</h2>
+        <p>Clients et professionnels créent leur compte sans frais. Le paiement des travaux reste entre vous.</p>
+        <div class="hero-actions">
+          <a class="btn" routerLink="/inscription">Commencer maintenant</a>
+          <a class="btn btn-glass" routerLink="/contact">Écrire à Jefamora</a>
+        </div>
+      </div>
+      <div class="cta-stats">
+        <p><strong>{{ trades().length || '—' }}</strong><span>métiers en ligne</span></p>
+        <p><strong>{{ zoneCount() || '—' }}</strong><span>zones du référentiel</span></p>
+        <p><strong>0 FCFA</strong><span>de commission</span></p>
+      </div>
     </div>
   </div>
 </section>

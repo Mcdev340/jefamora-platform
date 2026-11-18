@@ -1,12 +1,36 @@
 <section class="contact-page">
   <div class="frame">
     <header class="contact-intro">
-      <p class="contact-kicker">Support</p>
+      <p class="eyebrow contact-kicker">Support</p>
       <h1>Écrire à Jefamora</h1>
       <p>Le message ouvre un ticket rattaché à votre compte. Pour une mission, les échanges sont dans la mission.</p>
     </header>
     <div class="contact-studio-grid">
       <aside class="contact-place">
+        <article class="contact-info">
+          <span class="tile"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg></span>
+          <div>
+            <h3>Adresse</h3>
+            <address>Plateau, Dakar — Sénégal</address>
+            <a href="https://www.openstreetmap.org/?mlat=14.6708&mlon=-17.437#map=16/14.6708/-17.437" target="_blank" rel="noopener noreferrer">Voir l’itinéraire</a>
+          </div>
+        </article>
+        <article class="contact-info">
+          <span class="tile blue"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg></span>
+          <div>
+            <h3>Suivi du ticket</h3>
+            <p>Chaque message ouvre un ticket rattaché à votre compte.</p>
+            <a routerLink="/compte/support">Compte → Support</a>
+          </div>
+        </article>
+        <article class="contact-info">
+          <span class="tile green"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+          <div>
+            <h3>Données personnelles</h3>
+            <p>Export et suppression du compte se demandent depuis votre espace.</p>
+            <a routerLink="/compte/confidentialite">Compte → Confidentialité</a>
+          </div>
+        </article>
         <div class="contact-map">
           <iframe
             title="Carte : Jefamora, Plateau, Dakar"
@@ -15,15 +39,9 @@
             referrerpolicy="no-referrer-when-downgrade"
           ></iframe>
         </div>
-        <address>
-          <strong>Jefamora</strong>
-          <span>Plateau, Dakar</span>
-          <span>Sénégal</span>
-        </address>
-        <a href="https://www.openstreetmap.org/?mlat=14.6708&mlon=-17.437#map=16/14.6708/-17.437" target="_blank" rel="noopener noreferrer">Voir l’itinéraire</a>
-        <p>Le ticket reste dans <a routerLink="/compte/support">Compte → Support</a>. La confidentialité se gère dans <a routerLink="/compte/confidentialite">Compte → Confidentialité</a>.</p>
       </aside>
       <form class="contact-form" [formGroup]="form" (submit)="submit($event)">
+        <h2>Envoyer un message</h2>
         @if (error()) { <p class="alert">{{ error() }}</p> }
         @if (sent()) { <p class="ok">{{ sent() }}</p> }
         <p class="contact-label">Choisissez un sujet</p>

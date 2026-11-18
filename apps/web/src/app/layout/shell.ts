@@ -5,6 +5,8 @@ import { filter } from 'rxjs';
 
 import { AuthService } from '../core/auth.service';
 
+const THEME_KEY = 'jefamora.theme';
+
 @Component({
   selector: 'app-shell',
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
@@ -20,6 +22,7 @@ export class Shell {
   readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly path = signal(this.router.url);
+  readonly dark = signal(document.documentElement.classList.contains('dark'));
   readonly onHome = computed(() => {
     const path = this.path().split(/[?#]/)[0];
     return path === '/' || path === '';
@@ -39,6 +42,13 @@ export class Shell {
         takeUntilDestroyed(),
       )
       .subscribe(() => this.path.set(this.router.url));
+  }
+
+  toggleTheme(): void {
+    const dark = !this.dark();
+    this.dark.set(dark);
+    document.documentElement.classList.toggle('dark', dark);
+    localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light');
   }
 
   leave(): void {
