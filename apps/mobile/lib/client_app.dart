@@ -1,38 +1,17 @@
 import 'package:material_ui/material_ui.dart';
 
 import 'api.dart';
+import 'client_space.dart';
 import 'scope.dart';
 import 'theme.dart';
 import 'trade_look.dart';
 import 'widgets.dart';
 
-class ClientShell extends StatefulWidget {
+class ClientShell extends StatelessWidget {
   const ClientShell({super.key});
 
   @override
-  State<ClientShell> createState() => _ClientShellState();
-}
-
-class _ClientShellState extends State<ClientShell> {
-  int _index = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    const pages = [ClientHome(), RequestsPage(worker: false), MissionsPage(), AccountPage()];
-    return Scaffold(
-      body: pages[_index],
-      bottomNavigationBar: JefamoraBar(
-        index: _index,
-        onSelect: (value) => setState(() => _index = value),
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home_rounded), label: 'Accueil'),
-          NavigationDestination(icon: Icon(Icons.receipt_long_outlined), selectedIcon: Icon(Icons.receipt_long_rounded), label: 'Demandes'),
-          NavigationDestination(icon: Icon(Icons.construction_outlined), selectedIcon: Icon(Icons.construction_rounded), label: 'Missions'),
-          NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person_rounded), label: 'Compte'),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => const ClientSpace();
 }
 
 class ClientHome extends StatefulWidget {

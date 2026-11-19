@@ -4,6 +4,6 @@ Marketplace sénégalaise de mise en relation entre clients et professionnels qu
 
 ## Applications
 - API : Django + Django REST Framework
-- Mobile : Flutter
+- Mobile : Flutter (`apps/mobile`), clients et ouvriers
 - Backoffice : Angular
 - Infrastructure : Docker, Coolify et OVHcloud

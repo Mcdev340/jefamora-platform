@@ -14,6 +14,8 @@ void main() {
 
     await tester.tap(find.text('Commencer'));
     await tester.pumpAndSettle();
+    await tester.tap(find.text('Passer'));
+    await tester.pumpAndSettle();
 
     expect(find.text('Client'), findsOneWidget);
     expect(find.text('Ouvrier'), findsOneWidget);

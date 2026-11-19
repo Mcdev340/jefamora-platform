@@ -65,8 +65,8 @@ class StatusChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(color: const Color(0xFFFFEDD5), borderRadius: BorderRadius.circular(99)),
-      child: Text(label, style: const TextStyle(color: Color(0xFFC2410C), fontWeight: FontWeight.w700, fontSize: 12)),
+      decoration: BoxDecoration(color: const Color(0xFFFFF3CC), borderRadius: BorderRadius.circular(99)),
+      child: Text(label, style: const TextStyle(color: navy, fontWeight: FontWeight.w700, fontSize: 12)),
     );
   }
 }

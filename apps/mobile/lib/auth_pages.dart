@@ -42,9 +42,104 @@ class StartPage extends StatelessWidget {
               ),
               const Spacer(),
               FilledButton(
-                onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RolePage())),
+                style: FilledButton.styleFrom(backgroundColor: orange, foregroundColor: navy),
+                onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const OnboardingPage())),
                 child: const Text('Commencer'),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class OnboardingPage extends StatefulWidget {
+  const OnboardingPage({super.key});
+
+  @override
+  State<OnboardingPage> createState() => _OnboardingPageState();
+}
+
+class _OnboardingPageState extends State<OnboardingPage> {
+  final _controller = PageController();
+  int _page = 0;
+
+  static const _slides = [
+    (Icons.verified_rounded, 'Des profils vérifiés', 'Le badge Jefamora est accordé avant qu’un ouvrier apparaisse dans la recherche.'),
+    (Icons.receipt_long_rounded, 'Plusieurs devis, un seul choix', 'Vous décrivez le besoin, vous comparez, vous n’en retenez qu’un.'),
+    (Icons.place_rounded, 'Près de chez vous', 'La recherche suit le métier et l’adresse où la prestation doit avoir lieu.'),
+  ];
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _next() {
+    if (_page == _slides.length - 1) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RolePage()));
+      return;
+    }
+    _controller.nextPage(duration: const Duration(milliseconds: 280), curve: Curves.easeOut);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: cream,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RolePage())),
+                  child: const Text('Passer'),
+                ),
+              ),
+              Expanded(
+                child: PageView.builder(
+                  controller: _controller,
+                  itemCount: _slides.length,
+                  onPageChanged: (value) => setState(() => _page = value),
+                  itemBuilder: (_, index) {
+                    final item = _slides[index];
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 120,
+                          height: 120,
+                          decoration: const BoxDecoration(color: navy, shape: BoxShape.circle),
+                          child: Icon(item.$1, color: orange, size: 56),
+                        ),
+                        const SizedBox(height: 28),
+                        Text(item.$2, textAlign: TextAlign.center, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: navy)),
+                        const SizedBox(height: 12),
+                        Text(item.$3, textAlign: TextAlign.center, style: const TextStyle(color: muted, height: 1.4, fontSize: 16)),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var i = 0; i < _slides.length; i++)
+                    Container(
+                      width: i == _page ? 22 : 8,
+                      height: 8,
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(color: i == _page ? orange : navy.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(99)),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              FilledButton(onPressed: _next, child: Text(_page == _slides.length - 1 ? 'C’est parti' : 'Suivant')),
             ],
           ),
         ),

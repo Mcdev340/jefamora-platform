@@ -1,8 +1,11 @@
 import 'package:material_ui/material_ui.dart';
 
-const navy = Color(0xFF0E1B4D);
-const orange = Color(0xFFF97316);
-const cream = Color(0xFFF7F3EC);
+const navy = Color(0xFF35118D);
+const orange = Color(0xFFFFB91F);
+const cream = Color(0xFFF3F0FA);
+const violet = navy;
+const yellow = orange;
+const lavender = cream;
 const ink = Color(0xFF1E293B);
 const muted = Color(0xFF64748B);
 
@@ -20,7 +23,7 @@ ThemeData jefamoraTheme() {
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        backgroundColor: orange,
+        backgroundColor: navy,
         foregroundColor: Colors.white,
         minimumSize: const Size.fromHeight(48),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
@@ -44,7 +47,7 @@ ThemeData jefamoraTheme() {
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.white,
-      indicatorColor: const Color(0xFFFFEDD5),
+      indicatorColor: const Color(0xFFFFF3CC),
       height: 68,
       labelTextStyle: WidgetStateProperty.resolveWith((states) {
         final selected = states.contains(WidgetState.selected);
