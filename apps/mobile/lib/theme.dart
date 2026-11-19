@@ -1,0 +1,64 @@
+import 'package:material_ui/material_ui.dart';
+
+const navy = Color(0xFF0E1B4D);
+const orange = Color(0xFFF97316);
+const cream = Color(0xFFF7F3EC);
+const ink = Color(0xFF1E293B);
+const muted = Color(0xFF64748B);
+
+ThemeData jefamoraTheme() {
+  final scheme = ColorScheme.fromSeed(seedColor: navy, primary: navy, secondary: orange);
+  return ThemeData(
+    colorScheme: scheme,
+    scaffoldBackgroundColor: cream,
+    useMaterial3: true,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: navy,
+      foregroundColor: Colors.white,
+      centerTitle: false,
+      elevation: 0,
+    ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        backgroundColor: orange,
+        foregroundColor: Colors.white,
+        minimumSize: const Size.fromHeight(48),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: navy,
+        minimumSize: const Size.fromHeight(48),
+        side: const BorderSide(color: navy),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: Colors.white,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+    ),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: Colors.white,
+      surfaceTintColor: Colors.white,
+      indicatorColor: const Color(0xFFFFEDD5),
+      height: 68,
+      labelTextStyle: WidgetStateProperty.resolveWith((states) {
+        final selected = states.contains(WidgetState.selected);
+        return TextStyle(fontWeight: FontWeight.w700, fontSize: 12, color: selected ? orange : muted);
+      }),
+      iconTheme: WidgetStateProperty.resolveWith((states) {
+        final selected = states.contains(WidgetState.selected);
+        return IconThemeData(color: selected ? orange : muted, size: 24);
+      }),
+    ),
+    cardTheme: CardThemeData(
+      color: Colors.white,
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+    ),
+  );
+}
