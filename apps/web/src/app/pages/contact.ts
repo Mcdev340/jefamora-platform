@@ -22,20 +22,34 @@ export class ContactPage {
   readonly sent = signal('');
   readonly topics = ['Mon compte', 'Le badge vérifié', 'Une mission', 'Le catalogue'];
   readonly form = this.formBuilder.nonNullable.group({
+    phone: ['', [Validators.required, Validators.minLength(8)]],
+    email: ['', [Validators.required, Validators.email]],
     subject: ['', [Validators.required, Validators.maxLength(180)]],
     description: ['', [Validators.required, Validators.minLength(10)]],
-    priority: ['normal'],
   });
 
   constructor() {
     const raw = sessionStorage.getItem(DRAFT_KEY);
-    if (!raw) {
+    if (raw) {
+      try {
+        this.form.patchValue(JSON.parse(raw));
+      } catch {
+        sessionStorage.removeItem(DRAFT_KEY);
+      }
+    }
+    this.fillContact();
+  }
+
+  private fillContact(): void {
+    const profile = this.auth.profile();
+    if (!profile) {
       return;
     }
-    try {
-      this.form.patchValue(JSON.parse(raw));
-    } catch {
-      sessionStorage.removeItem(DRAFT_KEY);
+    if (!this.form.controls.email.value) {
+      this.form.controls.email.setValue(profile.email);
+    }
+    if (!this.form.controls.phone.value && profile.phone) {
+      this.form.controls.phone.setValue(profile.phone);
     }
   }
 
@@ -49,7 +63,7 @@ export class ContactPage {
     this.sent.set('');
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.error.set('Indiquez un sujet et un message d’au moins 10 caractères.');
+      this.error.set('Indiquez votre numéro, votre e-mail, un sujet et un message d’au moins 10 caractères.');
       return;
     }
     if (!this.auth.isLoggedIn()) {
@@ -61,10 +75,16 @@ export class ContactPage {
       this.error.set('Confirmez votre e-mail avant d’envoyer un message.');
       return;
     }
-    this.api.post('/support/tickets/', this.form.getRawValue()).subscribe({
+    const value = this.form.getRawValue();
+    this.api.post('/support/tickets/', {
+      subject: value.subject,
+      description: `${value.description.trim()}\n\nNuméro : ${value.phone.trim()}\nE-mail : ${value.email.trim()}`,
+      priority: 'normal',
+    }).subscribe({
       next: () => {
         sessionStorage.removeItem(DRAFT_KEY);
-        this.form.reset({ subject: '', description: '', priority: 'normal' });
+        this.form.reset({ phone: '', email: '', subject: '', description: '' });
+        this.fillContact();
         this.sent.set('Message envoyé. Vous le retrouvez dans Compte, rubrique Support.');
       },
       error: (err) => this.error.set(errorText(err)),

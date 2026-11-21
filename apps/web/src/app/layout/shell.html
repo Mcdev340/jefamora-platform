@@ -55,33 +55,53 @@
 </main>
 @if (!onAuth()) {
 <footer class="site-footer">
-  <div class="frame footer-grid">
-    <div class="footer-brand">
-      <a class="brand" routerLink="/">
-        <img class="brand-mark" src="logo-mark.png" alt="" />
-        <span><strong>Jefamora</strong></span>
-      </a>
-      <p>La plateforme qui connecte clients et professionnels qualifiés au Sénégal.</p>
+  <div class="frame">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" routerLink="/">
+          <img class="brand-mark" src="logo-mark.png" alt="" />
+          <span>
+            <strong>Jefamora</strong>
+            <small>Clients et professionnels</small>
+          </span>
+        </a>
+        <p>La plateforme qui connecte clients et professionnels qualifiés au Sénégal. Le paiement du chantier reste entre vous.</p>
+      </div>
+      <div>
+        <h3>Plateforme</h3>
+        <a routerLink="/">Accueil</a>
+        <a routerLink="/a-propos">À propos</a>
+        <a routerLink="/services">Services</a>
+        <a routerLink="/fonctionnalites">Fonctionnalités</a>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <ul class="footer-contact">
+          <li>
+            <a href="tel:+221785874472">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h3l1.2 3-1.8 1.1a12 12 0 0 0 5.5 5.5L17 12l3 1.2v3a2 2 0 0 1-2 2A14 14 0 0 1 6 6a2 2 0 0 1 2-2z"/></svg>
+              +221 78 587 44 72
+            </a>
+          </li>
+          <li>
+            <a href="https://www.openstreetmap.org/?mlat=14.6708&mlon=-17.437#map=16/14.6708/-17.437" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>
+              Plateau, Dakar — Sénégal
+            </a>
+          </li>
+          <li>
+            <a href="mailto:contact@jefamora.sn">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>
+              contact@jefamora.sn
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
-    <div>
-      <h3>Plateforme</h3>
-      <a routerLink="/a-propos">À propos</a>
-      <a routerLink="/services">Services</a>
-      <a routerLink="/fonctionnalites">Fonctionnalités</a>
-      <a routerLink="/contact">Contact</a>
-    </div>
-    <div>
-      <h3>Compte</h3>
-      <a routerLink="/connexion">Connexion</a>
-      <a routerLink="/inscription">Inscription</a>
-      <a routerLink="/compte/support">Support</a>
-    </div>
-    <div>
-      <h3>Engagement</h3>
-      <a routerLink="/espace-pro/verification">Profil vérifié</a>
-      <a routerLink="/compte/confidentialite">Confidentialité</a>
+    <div class="footer-copy">
+      <p>© 2026 Jefamora. Tous droits réservés.</p>
+      <p>Fait au Sénégal</p>
     </div>
   </div>
-  <p class="footer-copy">© 2026 Jefamora. Tous droits réservés. Fait au Sénégal.</p>
 </footer>
 }

@@ -96,13 +96,6 @@
       }
       <label>Sujet <input [value]="ticket().subject" (input)="ticket.set({ ...ticket(), subject: $any($event.target).value })" /></label>
       <label>Message <textarea [value]="ticket().description" (input)="ticket.set({ ...ticket(), description: $any($event.target).value })"></textarea></label>
-      <label>Priorité
-        <select [value]="ticket().priority" (change)="ticket.set({ ...ticket(), priority: $any($event.target).value })">
-          <option value="low">Basse</option>
-          <option value="normal">Normale</option>
-          <option value="high">Haute</option>
-        </select>
-      </label>
       <button class="btn" type="button" (click)="openTicket()">Ouvrir un ticket</button>
     </section>
   }

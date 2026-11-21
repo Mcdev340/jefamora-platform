@@ -1,9 +1,23 @@
 <section class="contact-page">
   <div class="frame">
     <header class="contact-intro">
-      <p class="eyebrow contact-kicker">Support</p>
-      <h1>Écrire à Jefamora</h1>
-      <p>Le message ouvre un ticket rattaché à votre compte. Pour une mission, les échanges sont dans la mission.</p>
+      <div class="contact-intro-card">
+        <div>
+          <p class="eyebrow contact-kicker">Support</p>
+          <h1>Écrire à <span>Jefamora</span></h1>
+          <p>Une question sur le compte passe par un ticket. Un chantier déjà retenu se discute dans la mission, avec le professionnel concerné.</p>
+        </div>
+        <ul class="contact-routes">
+          <li>
+            <span class="tile"><svg viewBox="0 0 24 24"><path d="M6 4h12v16H6z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span>
+            <span><strong>Ticket du compte</strong>Le message reste dans Compte → Support.</span>
+          </li>
+          <li>
+            <span class="tile blue"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg></span>
+            <span><strong>Mission en cours</strong>Les échanges du chantier ne passent pas par ce formulaire.</span>
+          </li>
+        </ul>
+      </div>
     </header>
     <div class="contact-studio-grid">
       <aside class="contact-place">
@@ -24,11 +38,11 @@
           </div>
         </article>
         <article class="contact-info">
-          <span class="tile green"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+          <span class="tile green"><svg viewBox="0 0 24 24"><path d="M8 4h3l1.2 3-1.8 1.1a12 12 0 0 0 5.5 5.5L17 12l3 1.2v3a2 2 0 0 1-2 2A14 14 0 0 1 6 6a2 2 0 0 1 2-2z"/></svg></span>
           <div>
-            <h3>Données personnelles</h3>
-            <p>Export et suppression du compte se demandent depuis votre espace.</p>
-            <a routerLink="/compte/confidentialite">Compte → Confidentialité</a>
+            <h3>WhatsApp</h3>
+            <p>Écrivez à Jefamora directement sur WhatsApp.</p>
+            <a href="https://wa.me/221785874472" target="_blank" rel="noopener noreferrer">+221 78 587 44 72</a>
           </div>
         </article>
         <div class="contact-map">
@@ -44,6 +58,14 @@
         <h2>Envoyer un message</h2>
         @if (error()) { <p class="alert">{{ error() }}</p> }
         @if (sent()) { <p class="ok">{{ sent() }}</p> }
+        <div class="pair">
+          <label>Numéro
+            <input formControlName="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+221 77 000 00 00" />
+          </label>
+          <label>Adresse e-mail
+            <input formControlName="email" type="email" autocomplete="email" placeholder="vous@exemple.com" />
+          </label>
+        </div>
         <p class="contact-label">Choisissez un sujet</p>
         <div class="topic-row">
           @for (topic of topics; track topic) {
@@ -55,13 +77,6 @@
         </label>
         <label>Message
           <textarea formControlName="description" placeholder="Décrivez la demande."></textarea>
-        </label>
-        <label>Priorité
-          <select formControlName="priority">
-            <option value="low">Basse</option>
-            <option value="normal">Normale</option>
-            <option value="high">Haute</option>
-          </select>
         </label>
         <button class="btn" type="submit">{{ auth.isLoggedIn() ? 'Envoyer' : 'Se connecter pour envoyer' }}</button>
         <p class="contact-hint">Le ticket est envoyé depuis un compte dont l’e-mail est confirmé.</p>

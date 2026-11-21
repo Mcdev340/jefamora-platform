@@ -29,7 +29,7 @@ export class AccountPage {
   readonly sessions = signal<DeviceSession[]>([]);
   readonly tickets = signal<SupportTicket[]>([]);
   readonly address = signal({ label: '', city: '', district: '' });
-  readonly ticket = signal({ subject: '', description: '', priority: 'normal' });
+  readonly ticket = signal({ subject: '', description: '' });
   readonly deletionReason = signal('');
 
   constructor() {
@@ -115,7 +115,7 @@ export class AccountPage {
   }
 
   openTicket(): void {
-    this.api.post('/support/tickets/', this.ticket()).subscribe({
+    this.api.post('/support/tickets/', { ...this.ticket(), priority: 'normal' }).subscribe({
       next: () => {
         this.notice.set('Ticket ouvert.');
         this.reload();
